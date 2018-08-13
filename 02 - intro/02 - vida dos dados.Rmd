@@ -1,9 +1,0 @@
----
-title:    "A vida secreta dos dados"
-subtitle: "Manejo, Visualização e Compartilhamento de Dados"
-author:   "Nicholas A. C. Marino"
-date:     "github.com/nacmarino/compartilhaR"
-output: 
-  ioslides_presentation:
-    wide: true
----
