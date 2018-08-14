@@ -1,5 +1,5 @@
 ---
-title:    "Importando e exportando dados no R"
+title:    "Leitura de Dados"
 subtitle: "Manejo, Visualização e Compartilhamento de Dados"
 author:   "Nicholas A. C. Marino"
 date:     "github.com/nacmarino/compartilhaR"
@@ -7,3 +7,79 @@ output:
   ioslides_presentation:
     wide: true
 ---
+
+## Estrutura da Aula
+
+1. [Revisando a leitura de dados no R](#anchor1)
+2. [Usando o pacote `readr` para leitura de dados](#anchor2)
+3. [Importando tabelas do Excel](#anchor3)
+4. [Exportando tabelas](#anchor4)
+5. [Exportando dados no formato de listas](#anchor5)
+6. [Importando dados no formato de listas](#anchor6)
+
+# Revisando a leitura de dados no R {#anchor1}
+
+## Leitura de dados padrão
+
+* É bastante comum utilizarmos as funções `read.csv` ou `read.table`, ambas disponíveis na `base` do R, para realizar a leitura de um conjunto de dados armazenados no seu computador com extensão `.csv` e `txt`, respectivamente.
+* Os dados importados através destas funções estarão disponíveis no ambiente de trabalho da sua sessão, e serão um objeto pertencente à classe `data.frame`.
+    + Um `data.frame` contém duas dimensões, as linhas e as colunas. As colunas contém os valores das diferentes variáveis, que caracterizam cada unidade observacional registradas nas linhas.
+    + Cada coluna armazena um único tipo de valor - somente números, somente caracteres, somente argumentos lógicos.
+
+## Exercício 1
+
+* Carregue o conjunto de dados `dados dos projetos.csv` no R e atribua a um objeto.
+* Determine a classe à qual pertença o objeto criado.
+* Determine a classe de objeto à qual pertence cada coluna do dados que você carregou.
+* Qual o tamanho das dimensões do conjunto de dados que você carregou?
+
+# Usando o pacote `readr` para a leitura de dados {#anchor2}
+
+## `readr`
+
+* De maneira alternativa às funções disponíveis na `base` do R, também podemos importar e exportar um conjunto de dados no R utilizando as funções do pacote `readr`.
+    + `read_<extensão>`, para importar;
+    + `write_<extensão>`, para exportar.
+* A sintaxe das funções deste pacote é similar àquela da `base`. No entanto, as funções do pacote `readr` atribuem __três__ classes de objeto à tabela importanta: `tbl_df`, `tbl` e `data.frame`.
+
+```{r eval=FALSE}
+library(readr)
+class(read_csv(file = "dados dos projetos.csv"))
+```
+
+```{r echo=FALSE, message=FALSE}
+library(readr)
+class(read_csv(file = "../99 - dados para exemplos/dados dos projetos.csv"))
+```
+
+## tibble
+
+* Toda a tabela de dados importada com o `readr` é um `tibble`:
+    + Possui a mesma estrutura e dimensões de um `data.frame`;
+    + Objetivo é facilitar a visualização dos dados na tabela;
+    + A classe de objeto dos elementos de cada coluna é apresentada junto da própria tabela;
+    + Previne a automatização da atribuição de certas classes de objeto a algumas colunas (_e.g._, toda coluna com caracteres é um fator, o que torna difícil sua manipulação).
+
+```{r eval=FALSE}
+dados <- read_csv(file = "dados dos projetos.csv")
+dados
+```
+
+## tibble {.smaller}
+
+```{r echo=FALSE, message=FALSE}
+dados <- read_csv(file = "../99 - dados para exemplos/dados dos projetos.csv")
+dados
+```
+
+# Importando tabelas do Excel {#anchor3}
+
+## `readxl`
+
+* Na maior parte das vezes, no entanto, armazenamos nossos dados nos formtatos-padrão do Microsoft Excel, como as extensões `.xls` ou `.xlsx`.
+
+# Exportando tabelas {#anchor4}
+
+# Exportando dados no formato de listas {#anchor5}
+
+# Importando dados no formato de listas {#anchor6}
