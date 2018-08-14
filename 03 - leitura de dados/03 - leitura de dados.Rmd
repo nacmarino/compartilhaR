@@ -15,11 +15,8 @@ output:
 3. [Importando tabelas do Excel](#anchor3)
 4. [Exportando tabelas](#anchor4)
 5. [Exportando dados no formato de listas](#anchor5)
-6. [Importando dados no formato de listas](#anchor6)
 
-# Revisando a leitura de dados no R {#anchor1}
-
-## Leitura de dados padrão
+## Revisando a leitura de dados no R {#anchor1}
 
 * É bastante comum utilizarmos as funções `read.csv` ou `read.table`, ambas disponíveis na `base` do R, para realizar a leitura de um conjunto de dados armazenados no seu computador com extensão `.csv` e `txt`, respectivamente.
 * Os dados importados através destas funções estarão disponíveis no ambiente de trabalho da sua sessão, e serão um objeto pertencente à classe `data.frame`.
@@ -33,9 +30,7 @@ output:
 * Determine a classe de objeto à qual pertence cada coluna do dados que você carregou.
 * Qual o tamanho das dimensões do conjunto de dados que você carregou?
 
-# Usando o pacote `readr` para a leitura de dados {#anchor2}
-
-## `readr`
+## Usando o pacote `readr` para a leitura de dados {#anchor2}
 
 * De maneira alternativa às funções disponíveis na `base` do R, também podemos importar e exportar um conjunto de dados no R utilizando as funções do pacote `readr`.
     + `read_<extensão>`, para importar;
@@ -72,14 +67,102 @@ dados <- read_csv(file = "../99 - dados para exemplos/dados dos projetos.csv")
 dados
 ```
 
-# Importando tabelas do Excel {#anchor3}
+## Importando tabelas do Excel {#anchor3} {.smaller}
 
-## `readxl`
+* Na maior parte das vezes, no entanto, armazenamos nossos dados nos formtatos-padrão do Microsoft Excel, com as extensões `.xls` ou `.xlsx`.
+* Nestes casos, podemos utilizar as funções do pacote `readxl` para importar tabelas de dados com estas extensões.
+    + `read_xls`, para extensão `.xls`
+    + `read_xlsx`, para entensão `.xlsx`
+    + `read_excel`, como uma função genérica tanto ambas as extensões
 
-* Na maior parte das vezes, no entanto, armazenamos nossos dados nos formtatos-padrão do Microsoft Excel, como as extensões `.xls` ou `.xlsx`.
+```{r message=FALSE}
+library(readxl)
+args(read_excel)
+```
 
-# Exportando tabelas {#anchor4}
+## Exercício 2
 
-# Exportando dados no formato de listas {#anchor5}
+* Importe os arquivos `autores.xls` e `revistas.xlsx` e armazene cada um deles em um objeto distinto.
+* A importação ocorreu sem problemas?
+* Qual o tamanho das dimensões de cada um destes objetos?
+* Selecione apenas a segunda coluna da tabela `revistas.xlsx`.
+* Selecione apenas as linhas 10 a 40 da tabela `revistas.xlsx`.
+* Exclua apenas a primeira coluna da tabela `revistas.xlsx`.
 
-# Importando dados no formato de listas {#anchor6}
+## Exportando tabelas {#anchor4}
+
+* O processamento e análise de dados podem gerar um enorme volume de informações, que muitas vezes serão empregados em outro contexto ou plataforma que não aquela do ambiente de programação - por exemplo:
+    + Criação de subconjuntos dos dados;
+    + Resultados de análise estatísticas;
+    + Predições de modelos para confecção de figuras.
+* Portanto, uma importante tarefa também é exportar as tabelas de dados geradas dentro do ambiente de programação.
+* Podemos organizar os dados que queremos exportar dentro de um `data.frame` (ou `tibble`), e utilizar as funções `write_csv`, `write_tsv` ou, ainda `write_delim` para salvar esta nova tabela de dados no diretório que você preferir.
+    
+## Exportando tabelas
+
+* No exemplo abaixo, estamos criando um `data.frame` com duas colunas, `x` e `y` e exportando o objeto que representa este `data.frame` utilizando a função `write_csv`.
+* As funções `rep` e `seq` são utilizadas, respectivamente, para repetir e criar uma sequência de valores.
+
+```{r eval=FALSE}
+exemplo <- data.frame(x = rep(x = 1:3, each = 3), y = seq(from = 2, to = 18, by = 2))
+write_csv(x = exemplo, path = "exemplo_exportacao.csv")
+```
+
+## Exercício 3
+
+* Do objeto onde você armazenou a tabela de dados `revistas.xlsx`, retenha apenas as observacoes que correspondam às revistas brasileiras, e armazene o resultado dessa operação em um novo objeto.
+* Exporte este objeto, para o diretório e utilizando a extensão de sua escolha.
+
+## Exportando dados no formato de listas {#anchor5}
+
+* A vantagem de uma tabela de dados (`data.frame` ou `tibble`) é a facilidade com a qual podemos adicionar, remover e  manipular seus elementos.
+* Apesar disso, nem sempre é útil ou possível que armazenemos um conjunto de dados neste formato. Alguns exemplos disso são:
+    + Quando precisamos trabalhar com múltiplas tabelas de dados similares, mas que representam entidades diferentes (e.g., amostragens realizadas em anos diferentes, dados de espécies diferentes,...);
+    + Quando precisamos trabalhar com múltiplas tabelas de dados diferentes, mas todas dentro do mesmo contexto (e.g., _rasters_ diferentes para a construção de um mesmo mapa);
+    + Quando queremos manter juntos todos os dados e resultados utilizados em uma análise.  
+
+## Exportando dados no formato de listas
+
+* Nestas situações podemos armazenar todas estas fontes de dados em uma lista, utilizando a função `list`.
+
+```{r eval=FALSE}
+list(projetos = dados,
+     exemplo_da_aula = exemplo,
+     vetor = 1:100)
+```
+
+* As listas são úteis pois podem acomodar objetos de classe diferentes, objetos com dimensões distintas e, também, múltiplos `data.frame` onde não haja correspondência entre a ordem das colunas.   
+
+## Exercício 4
+
+* Com os dois `data.frame` abaixo, tente juntá-los em uma único objeto utilizando a função `rbind.data.frame` e list`.
+
+```{r eval=FALSE}
+set.seed(33)
+tab1 <- data.frame(x = rnorm(n = 10, mean = 4, sd = 2),
+                   y = runif(n = 10, min = 0, max = 10))
+set.seed(83)
+tab2 <- data.frame(z = 1:5, k = rpois(n = 5, lambda = 20))
+```
+
+## Exportando dados no formato de listas
+
+* Podemos exportar uma lista contendo múltiplos elementos através da função `write_rds` (do pacote `readr`) ou `write.rds` (da `base` do R).
+
+```{r eval=FALSE}
+write_rds(x = list(tab1, tab2), path = "lista salva.rds")
+```
+
+## Exercício 5
+
+* Crie uma lista contendo os dados presentes em `dados dos projetos.csv`, `autores.xls`, `publicacoes.xls` e `revistas.xls`.
+* Salve esta lista em algum diretório no seu computador.  
+* Importe o arquivo contendo esta lista novamente para o R, e atribua ela a um objeto.  
+* Selecione o terceiro elemento da lista que você importou.  
+
+## Resumindo
+
+* Podemos utilizar as funções dos pacotes `readr` e `readxl` para importar um conjunto de dados para o R.
+* Toda a função utilizada para importar um conjunto de dados começa com `read`, enquanto toda função utilizada para exportação dos mesmos começa com `write`.
+* O ideal é que armazenemos as tabelas de dados primários (ou brutos) em um formato não-proprietário, como aquele com extensão `.csv`.
+* Podemos (e devemos) abusar da flexibilidade das listas ao armazenar e exportar os resultados de processamentos e análises de dados.

@@ -106,12 +106,9 @@
 <li><a href='#anchor3' title=''>Importando tabelas do Excel</a></li>
 <li><a href='#anchor4' title=''>Exportando tabelas</a></li>
 <li><a href='#anchor5' title=''>Exportando dados no formato de listas</a></li>
-<li><a href='#anchor6' title=''>Importando dados no formato de listas</a></li>
 </ol>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Revisando a leitura de dados no R</h2></hgroup><article  id="anchor1">
-
-</article></slide><slide class=""><hgroup><h2>Leitura de dados padrão</h2></hgroup><article  id="leitura-de-dados-padrao">
+</article></slide><slide class=""><hgroup><h2>Revisando a leitura de dados no R</h2></hgroup><article  id="anchor1">
 
 <ul>
 <li>É bastante comum utilizarmos as funções <code>read.csv</code> ou <code>read.table</code>, ambas disponíveis na <code>base</code> do R, para realizar a leitura de um conjunto de dados armazenados no seu computador com extensão <code>.csv</code> e <code>txt</code>, respectivamente.</li>
@@ -132,9 +129,7 @@
 <li>Qual o tamanho das dimensões do conjunto de dados que você carregou?</li>
 </ul>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Usando o pacote <code>readr</code> para a leitura de dados</h2></hgroup><article  id="anchor2">
-
-</article></slide><slide class=""><hgroup><h2><code>readr</code></h2></hgroup><article  id="readr">
+</article></slide><slide class=""><hgroup><h2>Usando o pacote <code>readr</code> para a leitura de dados</h2></hgroup><article  id="anchor2">
 
 <ul>
 <li>De maneira alternativa às funções disponíveis na <code>base</code> do R, também podemos importar e exportar um conjunto de dados no R utilizando as funções do pacote <code>readr</code>.
@@ -190,19 +185,133 @@ dados</pre>
 ## #   custeio_contratado &lt;dbl&gt;, custeio_gasto &lt;dbl&gt;, total_fornecido &lt;dbl&gt;,
 ## #   total_gasto &lt;dbl&gt;</pre>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Importando tabelas do Excel</h2></hgroup><article  id="anchor3">
-
-</article></slide><slide class=""><hgroup><h2><code>readxl</code></h2></hgroup><article  id="readxl">
+</article></slide><slide class=""><hgroup><h2>Importando tabelas do Excel {#anchor3}</h2></hgroup><article  id="importando-tabelas-do-excel-anchor3" class="smaller">
 
 <ul>
-<li>Na maior parte das vezes, no entanto, armazenamos nossos dados nos formtatos-padrão do Microsoft Excel, como as extensões <code>.xls</code> ou <code>.xlsx</code>.</li>
+<li>Na maior parte das vezes, no entanto, armazenamos nossos dados nos formtatos-padrão do Microsoft Excel, com as extensões <code>.xls</code> ou <code>.xlsx</code>.</li>
+<li>Nestes casos, podemos utilizar as funções do pacote <code>readxl</code> para importar tabelas de dados com estas extensões.
+
+<ul>
+<li><code>read_xls</code>, para extensão <code>.xls</code></li>
+<li><code>read_xlsx</code>, para entensão <code>.xlsx</code></li>
+<li><code>read_excel</code>, como uma função genérica tanto ambas as extensões</li>
+</ul></li>
 </ul>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Exportando tabelas</h2></hgroup><article  id="anchor4">
+<pre class = 'prettyprint lang-r'>library(readxl)
+args(read_excel)</pre>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Exportando dados no formato de listas</h2></hgroup><article  id="anchor5">
+<pre >## function (path, sheet = NULL, range = NULL, col_names = TRUE, 
+##     col_types = NULL, na = &quot;&quot;, trim_ws = TRUE, skip = 0, n_max = Inf, 
+##     guess_max = min(1000, n_max)) 
+## NULL</pre>
 
-</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Importando dados no formato de listas</h2></hgroup><article  id="anchor6"></article></slide>
+</article></slide><slide class=""><hgroup><h2>Exercício 2</h2></hgroup><article  id="exercicio-2">
+
+<ul>
+<li>Importe os arquivos <code>autores.xls</code> e <code>revistas.xlsx</code> e armazene cada um deles em um objeto distinto.</li>
+<li>A importação ocorreu sem problemas?</li>
+<li>Qual o tamanho das dimensões de cada um destes objetos?</li>
+<li>Selecione apenas a segunda coluna da tabela <code>revistas.xlsx</code>.</li>
+<li>Selecione apenas as linhas 10 a 40 da tabela <code>revistas.xlsx</code>.</li>
+<li>Exclua apenas a primeira coluna da tabela <code>revistas.xlsx</code>.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exportando tabelas</h2></hgroup><article  id="anchor4">
+
+<ul>
+<li>O processamento e análise de dados podem gerar um enorme volume de informações, que muitas vezes serão empregados em outro contexto ou plataforma que não aquela do ambiente de programação - por exemplo:
+
+<ul>
+<li>Criação de subconjuntos dos dados;</li>
+<li>Resultados de análise estatísticas;</li>
+<li>Predições de modelos para confecção de figuras.</li>
+</ul></li>
+<li>Portanto, uma importante tarefa também é exportar as tabelas de dados geradas dentro do ambiente de programação.</li>
+<li>Podemos organizar os dados que queremos exportar dentro de um <code>data.frame</code> (ou <code>tibble</code>), e utilizar as funções <code>write_csv</code>, <code>write_tsv</code> ou, ainda <code>write_delim</code> para salvar esta nova tabela de dados no diretório que você preferir.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exportando tabelas</h2></hgroup><article  id="exportando-tabelas">
+
+<ul>
+<li>No exemplo abaixo, estamos criando um <code>data.frame</code> com duas colunas, <code>x</code> e <code>y</code> e exportando o objeto que representa este <code>data.frame</code> utilizando a função <code>write_csv</code>.</li>
+<li>As funções <code>rep</code> e <code>seq</code> são utilizadas, respectivamente, para repetir e criar uma sequência de valores.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>exemplo &lt;- data.frame(x = rep(x = 1:3, each = 3), y = seq(from = 2, to = 18, by = 2))
+write_csv(x = exemplo, path = &quot;exemplo_exportacao.csv&quot;)</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 3</h2></hgroup><article  id="exercicio-3">
+
+<ul>
+<li>Do objeto onde você armazenou a tabela de dados <code>revistas.xlsx</code>, retenha apenas as observacoes que correspondam às revistas brasileiras, e armazene o resultado dessa operação em um novo objeto.</li>
+<li>Exporte este objeto, para o diretório e utilizando a extensão de sua escolha.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exportando dados no formato de listas</h2></hgroup><article  id="anchor5">
+
+<ul>
+<li>A vantagem de uma tabela de dados (<code>data.frame</code> ou <code>tibble</code>) é a facilidade com a qual podemos adicionar, remover e manipular seus elementos.</li>
+<li>Apesar disso, nem sempre é útil ou possível que armazenemos um conjunto de dados neste formato. Alguns exemplos disso são:
+
+<ul>
+<li>Quando precisamos trabalhar com múltiplas tabelas de dados similares, mas que representam entidades diferentes (e.g., amostragens realizadas em anos diferentes, dados de espécies diferentes,&#8230;);</li>
+<li>Quando precisamos trabalhar com múltiplas tabelas de dados diferentes, mas todas dentro do mesmo contexto (e.g., <em>rasters</em> diferentes para a construção de um mesmo mapa);</li>
+<li>Quando queremos manter juntos todos os dados e resultados utilizados em uma análise.</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exportando dados no formato de listas</h2></hgroup><article  id="exportando-dados-no-formato-de-listas">
+
+<ul>
+<li>Nestas situações podemos armazenar todas estas fontes de dados em uma lista, utilizando a função <code>list</code>.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>list(projetos = dados,
+     exemplo_da_aula = exemplo,
+     vetor = 1:100)</pre>
+
+<ul>
+<li>As listas são úteis pois podem acomodar objetos de classe diferentes, objetos com dimensões distintas e, também, múltiplos <code>data.frame</code> onde não haja correspondência entre a ordem das colunas.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 4</h2></hgroup><article  id="exercicio-4">
+
+<ul>
+<li>Com os dois <code>data.frame</code> abaixo, tente juntá-los em uma único objeto utilizando a função <code>rbind.data.frame</code> e list`.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>set.seed(33)
+tab1 &lt;- data.frame(x = rnorm(n = 10, mean = 4, sd = 2),
+                   y = runif(n = 10, min = 0, max = 10))
+set.seed(83)
+tab2 &lt;- data.frame(z = 1:5, k = rpois(n = 5, lambda = 20))</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exportando dados no formato de listas</h2></hgroup><article  id="exportando-dados-no-formato-de-listas-1">
+
+<ul>
+<li>Podemos exportar uma lista contendo múltiplos elementos através da função <code>write_rds</code> (do pacote <code>readr</code>) ou <code>write.rds</code> (da <code>base</code> do R).</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>write_rds(x = list(tab1, tab2), path = &quot;lista salva.rds&quot;)</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 5</h2></hgroup><article  id="exercicio-5">
+
+<ul>
+<li>Crie uma lista contendo os dados presentes em <code>dados dos projetos.csv</code>, <code>autores.xls</code>, <code>publicacoes.xls</code> e <code>revistas.xls</code>.</li>
+<li>Salve esta lista em algum diretório no seu computador.<br/></li>
+<li>Importe o arquivo contendo esta lista novamente para o R, e atribua ela a um objeto.<br/></li>
+<li>Selecione o terceiro elemento da lista que você importou.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Resumindo</h2></hgroup><article  id="resumindo">
+
+<ul>
+<li>Podemos utilizar as funções dos pacotes <code>readr</code> e <code>readxl</code> para importar um conjunto de dados para o R.</li>
+<li>Toda a função utilizada para importar um conjunto de dados começa com <code>read</code>, enquanto toda função utilizada para exportação dos mesmos começa com <code>write</code>.</li>
+<li>O ideal é que armazenemos as tabelas de dados primários (ou brutos) em um formato não-proprietário, como aquele com extensão <code>.csv</code>.</li>
+<li>Podemos (e devemos) abusar da flexibilidade das listas ao armazenar e exportar os resultados de processamentos e análises de dados.</li>
+</ul></article></slide>
 
 
   <slide class="backdrop"></slide>
