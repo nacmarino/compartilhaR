@@ -35,8 +35,8 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 #*.pptx
-#99 - dados para exemplos/autores.xls
-#99 - dados para exemplos/dados dos projetos.csv
-#99 - dados para exemplos/publicacoes.xls
-#99 - dados para exemplos/revistas.xlsx
+99 - dados para exemplos/*.xls
+99 - dados para exemplos/*.csv
+99 - dados para exemplos/*.rds
+99 - dados para exemplos/*.xlsx
 .Rproj.user
