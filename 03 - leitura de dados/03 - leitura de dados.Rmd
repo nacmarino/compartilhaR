@@ -25,10 +25,10 @@ output:
 
 ## Exercício 1
 
-* Carregue o conjunto de dados `dados dos projetos.csv` no R e atribua a um objeto.
-* Determine a classe à qual pertença o objeto criado.
-* Determine a classe de objeto à qual pertence cada coluna do dados que você carregou.
-* Qual o tamanho das dimensões do conjunto de dados que você carregou?
+a. Carregue o conjunto de dados `dados dos projetos.csv` no R e atribua a um objeto.
+b. Determine a classe à qual pertença o objeto criado.
+c. Determine a classe de objeto à qual pertence cada coluna do dados que você carregou.
+d. Qual o tamanho das dimensões do conjunto de dados que você carregou?
 
 ## Usando o pacote `readr` para a leitura de dados {#anchor2}
 
@@ -82,12 +82,12 @@ args(read_excel)
 
 ## Exercício 2
 
-* Importe os arquivos `autores.xls` e `revistas.xlsx` e armazene cada um deles em um objeto distinto.
-* A importação ocorreu sem problemas?
-* Qual o tamanho das dimensões de cada um destes objetos?
-* Selecione apenas a segunda coluna da tabela `revistas.xlsx`.
-* Selecione apenas as linhas 10 a 40 da tabela `revistas.xlsx`.
-* Exclua apenas a primeira coluna da tabela `revistas.xlsx`.
+a. Importe os arquivos `autores.xls` e `revistas.xlsx` e armazene cada um deles em um objeto distinto.
+b. A importação ocorreu sem problemas?
+c. Qual o tamanho das dimensões de cada um destes objetos?
+d. Selecione apenas a segunda coluna da tabela `revistas.xlsx`.
+e. Selecione apenas as linhas 10 a 40 da tabela `revistas.xlsx`.
+f. Exclua apenas a primeira coluna da tabela `revistas.xlsx`.
 
 ## Exportando tabelas {#anchor4}
 
@@ -110,8 +110,8 @@ write_csv(x = exemplo, path = "exemplo_exportacao.csv")
 
 ## Exercício 3
 
-* Do objeto onde você armazenou a tabela de dados `revistas.xlsx`, retenha apenas as observacoes que correspondam às revistas brasileiras, e armazene o resultado dessa operação em um novo objeto.
-* Exporte este objeto, para o diretório e utilizando a extensão de sua escolha.
+a. Do objeto onde você armazenou a tabela de dados `revistas.xlsx`, retenha apenas as observacoes que correspondam às revistas brasileiras, e armazene o resultado dessa operação em um novo objeto.
+b. Exporte este objeto, para o diretório e utilizando a extensão de sua escolha.
 
 ## Exportando dados no formato de listas {#anchor5}
 
@@ -135,7 +135,7 @@ list(projetos = dados,
 
 ## Exercício 4
 
-* Com os dois `data.frame` abaixo, tente juntá-los em uma único objeto utilizando a função `rbind.data.frame` e list`.
+a. Com os dois `data.frame` abaixo, tente juntá-los em uma único objeto utilizando a função `rbind.data.frame` e `list`.
 
 ```{r eval=FALSE}
 set.seed(33)
@@ -155,10 +155,10 @@ write_rds(x = list(tab1, tab2), path = "lista salva.rds")
 
 ## Exercício 5
 
-* Crie uma lista contendo os dados presentes em `dados dos projetos.csv`, `autores.xls`, `publicacoes.xls` e `revistas.xls`.
-* Salve esta lista em algum diretório no seu computador.  
-* Importe o arquivo contendo esta lista novamente para o R, e atribua ela a um objeto.  
-* Selecione o terceiro elemento da lista que você importou.  
+a. Crie uma lista contendo os dados presentes em `dados dos projetos.csv`, `autores.xls`, `publicacoes.xls` e `revistas.xlsx`, nomeando cada elemento desta lista com o nome do arquivo onde está cada dado.
+b. Salve esta lista em algum diretório no seu computador.  
+c. Importe o arquivo contendo esta lista novamente para o R, e atribua ela a um objeto.  
+d. Selecione o terceiro elemento da lista que você importou.  
 
 ## Resumindo
 

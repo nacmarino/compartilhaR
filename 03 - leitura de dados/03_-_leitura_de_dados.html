@@ -122,12 +122,12 @@
 
 </article></slide><slide class=""><hgroup><h2>Exercício 1</h2></hgroup><article  id="exercicio-1">
 
-<ul>
+<ol>
 <li>Carregue o conjunto de dados <code>dados dos projetos.csv</code> no R e atribua a um objeto.</li>
 <li>Determine a classe à qual pertença o objeto criado.</li>
 <li>Determine a classe de objeto à qual pertence cada coluna do dados que você carregou.</li>
 <li>Qual o tamanho das dimensões do conjunto de dados que você carregou?</li>
-</ul>
+</ol>
 
 </article></slide><slide class=""><hgroup><h2>Usando o pacote <code>readr</code> para a leitura de dados</h2></hgroup><article  id="anchor2">
 
@@ -164,23 +164,23 @@ dados</pre>
 
 </article></slide><slide class=""><hgroup><h2>tibble</h2></hgroup><article  id="tibble-1" class="smaller">
 
-<pre >## # A tibble: 119 x 27
-##    Processo Chamada id_coordenador coordenador sexo  inicio     termino   
-##       &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt; &lt;chr&gt;       &lt;chr&gt; &lt;date&gt;     &lt;date&gt;    
-##  1  4.86e10 Univer~              1 Alexandre ~ M     2012-11-06 2015-11-05
-##  2  4.01e10 BJT                  2 Ana Teresa~ F     2012-09-12 2015-09-11
-##  3  4.82e10 Univer~              3 Andre Andr~ M     2013-11-08 2016-11-30
-##  4  4.72e10 Univer~              4 Ariadne do~ F     2012-12-14 2015-12-31
-##  5  4.76e10 Univer~              5 Braulio Al~ M     2013-10-30 2016-10-31
-##  6  4.82e10 Univer~              6 Bruce Ride~ M     2013-05-07 2016-05-05
-##  7  4.80e10 Univer~              7 Bruce Walk~ M     2012-11-19 2015-11-18
-##  8  4.46e10 Incuba~              8 Carbio Alm~ M     2016-08-02 2016-12-31
-##  9  4.58e10 PPBio ~              9 Carlos Edu~ M     2012-12-12 2015-12-11
-## 10  4.72e10 Univer~             10 Carlos Fre~ M     2012-11-28 2015-11-30
-## # ... with 109 more rows, and 20 more variables: instituicao &lt;chr&gt;,
-## #   uf &lt;chr&gt;, cidade &lt;chr&gt;, regiao &lt;chr&gt;, duracao &lt;int&gt;, brasileiro &lt;chr&gt;,
-## #   produtividade &lt;chr&gt;, doutorado &lt;int&gt;, doutorado_exterior &lt;chr&gt;,
-## #   sanduiche &lt;chr&gt;, posdoc &lt;chr&gt;, indiceH &lt;int&gt;, bolsa_contratado &lt;dbl&gt;,
+<pre >## # A tibble: 119 x 26
+##     Processo Chamada id_coordenador sexo  inicio termino instituicao uf   
+##        &lt;dbl&gt; &lt;chr&gt;            &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;
+##  1   4.86e10 Univer…              1 M     06/11… 05/11/… FURG        RS   
+##  2   4.01e10 BJT                  2 F     12/09… 11/09/… UFSCAR      SP   
+##  3   4.82e10 Univer…              3 M     08/11… 30/11/… UFPR-PRPG   PR   
+##  4   4.72e10 Univer…              4 F     14/12… 31/12/… UFRPE       PE   
+##  5   4.76e10 Univer…              5 M     30/10… 31/10/… UFPB        PB   
+##  6   4.82e10 Univer…              6 M     07/05… 05/05/… INPA        AM   
+##  7   4.80e10 Univer…              7 M     19/11… 18/11/… INPA        AM   
+##  8   4.46e10 Incuba…              8 M     02/08… 31/12/… PUC GOIAS   GO   
+##  9   4.58e10 PPBio …              9 M     12/12… 11/12/… UFRJ        RJ   
+## 10   4.72e10 Univer…             10 M     28/11… 30/11/… UERJ        RJ   
+## # ... with 109 more rows, and 18 more variables: cidade &lt;chr&gt;,
+## #   regiao &lt;chr&gt;, duracao &lt;int&gt;, brasileiro &lt;chr&gt;, produtividade &lt;chr&gt;,
+## #   doutorado &lt;int&gt;, doutorado_exterior &lt;chr&gt;, sanduiche &lt;chr&gt;,
+## #   posdoc &lt;chr&gt;, indiceH &lt;int&gt;, bolsa_contratado &lt;dbl&gt;,
 ## #   bolsa_gasto &lt;int&gt;, capital_contratado &lt;dbl&gt;, capital_gasto &lt;dbl&gt;,
 ## #   custeio_contratado &lt;dbl&gt;, custeio_gasto &lt;dbl&gt;, total_fornecido &lt;dbl&gt;,
 ## #   total_gasto &lt;dbl&gt;</pre>
@@ -198,8 +198,11 @@ dados</pre>
 </ul></li>
 </ul>
 
-<pre class = 'prettyprint lang-r'>library(readxl)
-args(read_excel)</pre>
+<pre class = 'prettyprint lang-r'>library(readxl)</pre>
+
+<pre >## Warning: package &#39;readxl&#39; was built under R version 3.4.4</pre>
+
+<pre class = 'prettyprint lang-r'>args(read_excel)</pre>
 
 <pre >## function (path, sheet = NULL, range = NULL, col_names = TRUE, 
 ##     col_types = NULL, na = &quot;&quot;, trim_ws = TRUE, skip = 0, n_max = Inf, 
@@ -208,14 +211,14 @@ args(read_excel)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Exercício 2</h2></hgroup><article  id="exercicio-2">
 
-<ul>
+<ol>
 <li>Importe os arquivos <code>autores.xls</code> e <code>revistas.xlsx</code> e armazene cada um deles em um objeto distinto.</li>
 <li>A importação ocorreu sem problemas?</li>
 <li>Qual o tamanho das dimensões de cada um destes objetos?</li>
 <li>Selecione apenas a segunda coluna da tabela <code>revistas.xlsx</code>.</li>
 <li>Selecione apenas as linhas 10 a 40 da tabela <code>revistas.xlsx</code>.</li>
 <li>Exclua apenas a primeira coluna da tabela <code>revistas.xlsx</code>.</li>
-</ul>
+</ol>
 
 </article></slide><slide class=""><hgroup><h2>Exportando tabelas</h2></hgroup><article  id="anchor4">
 
@@ -243,10 +246,10 @@ write_csv(x = exemplo, path = &quot;exemplo_exportacao.csv&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Exercício 3</h2></hgroup><article  id="exercicio-3">
 
-<ul>
+<ol>
 <li>Do objeto onde você armazenou a tabela de dados <code>revistas.xlsx</code>, retenha apenas as observacoes que correspondam às revistas brasileiras, e armazene o resultado dessa operação em um novo objeto.</li>
 <li>Exporte este objeto, para o diretório e utilizando a extensão de sua escolha.</li>
-</ul>
+</ol>
 
 </article></slide><slide class=""><hgroup><h2>Exportando dados no formato de listas</h2></hgroup><article  id="anchor5">
 
@@ -277,9 +280,9 @@ write_csv(x = exemplo, path = &quot;exemplo_exportacao.csv&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Exercício 4</h2></hgroup><article  id="exercicio-4">
 
-<ul>
-<li>Com os dois <code>data.frame</code> abaixo, tente juntá-los em uma único objeto utilizando a função <code>rbind.data.frame</code> e list`.</li>
-</ul>
+<ol>
+<li>Com os dois <code>data.frame</code> abaixo, tente juntá-los em uma único objeto utilizando a função <code>rbind.data.frame</code> e <code>list</code>.</li>
+</ol>
 
 <pre class = 'prettyprint lang-r'>set.seed(33)
 tab1 &lt;- data.frame(x = rnorm(n = 10, mean = 4, sd = 2),
@@ -297,12 +300,12 @@ tab2 &lt;- data.frame(z = 1:5, k = rpois(n = 5, lambda = 20))</pre>
 
 </article></slide><slide class=""><hgroup><h2>Exercício 5</h2></hgroup><article  id="exercicio-5">
 
-<ul>
-<li>Crie uma lista contendo os dados presentes em <code>dados dos projetos.csv</code>, <code>autores.xls</code>, <code>publicacoes.xls</code> e <code>revistas.xls</code>.</li>
+<ol>
+<li>Crie uma lista contendo os dados presentes em <code>dados dos projetos.csv</code>, <code>autores.xls</code>, <code>publicacoes.xls</code> e <code>revistas.xlsx</code>, nomeando cada elemento desta lista com o nome do arquivo onde está cada dado.</li>
 <li>Salve esta lista em algum diretório no seu computador.<br/></li>
 <li>Importe o arquivo contendo esta lista novamente para o R, e atribua ela a um objeto.<br/></li>
 <li>Selecione o terceiro elemento da lista que você importou.</li>
-</ul>
+</ol>
 
 </article></slide><slide class=""><hgroup><h2>Resumindo</h2></hgroup><article  id="resumindo">
 
