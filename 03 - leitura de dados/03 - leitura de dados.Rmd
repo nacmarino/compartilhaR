@@ -42,7 +42,7 @@ library(readr)
 class(read_csv(file = "dados dos projetos.csv"))
 ```
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(readr)
 class(read_csv(file = "../99 - dados para exemplos/dados dos projetos.csv"))
 ```
@@ -62,7 +62,7 @@ dados
 
 ## tibble {.smaller}
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 dados <- read_csv(file = "../99 - dados para exemplos/dados dos projetos.csv")
 dados
 ```
@@ -75,7 +75,7 @@ dados
     + `read_xlsx`, para entensão `.xlsx`
     + `read_excel`, como uma função genérica tanto ambas as extensões
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(readxl)
 args(read_excel)
 ```
