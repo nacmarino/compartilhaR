@@ -119,7 +119,7 @@ h1,h2,h3,h4,h5,h6{
 <li><a href='#anchor1' title=''>A natureza dos dados</a></li>
 <li><a href='#anchor#2' title=''>Métodos orientados ao conteúdo das colunas</a></li>
 <li><a href='#anchor3' title=''>Métodos orientados à tabela de dados</a></li>
-<li><a href='#anchor4' title=''>Dados relacionais</a></li>
+<li><a href='#anchor4' title=''>De largo para longo, e de volta outra vez</a></li>
 </ol>
 
 </article></slide><slide class=""><hgroup><h2>A natureza dos dados</h2></hgroup><article  id="anchor1">
@@ -236,7 +236,7 @@ tidyverse_packages()</pre>
 </ul></li>
 </ol>
 
-</article></slide><slide class=""><hgroup><h2>Métodos orientados ao conteúdo das colunas</h2></hgroup><article  id="metodos-orientados-ao-conteudo-das-colunas">
+</article></slide><slide class=""><hgroup><h2>Métodos orientados ao conteúdo das colunas</h2></hgroup><article  id="anchor2">
 
 <ul>
 <li>É muito comum que cometamos erros de digitação ao preenchermos uma tabela e uma vez que estes erros sejam detectados, normalmente consertamos eles manualmente na tabela de dados brutos.</li>
@@ -310,7 +310,7 @@ tidyverse_packages()</pre>
 <li>Caso não tenha sido corrigida, o que você acha que aconteceu? Como podemos realizar essa correção?</li>
 </ol>
 
-</article></slide><slide class=""><hgroup><h2>Substituição de valores</h2></hgroup><article  id="substituicao-de-valores-3">
+</article></slide><slide class=""><hgroup><h2>Edição de valores em um vetor</h2></hgroup><article  id="edicao-de-valores-em-um-vetor">
 
 <ul>
 <li>Valores e nomes de variáveis com espaço, muito longos, com caracteres especiais, em caixa alta e etc, podem causar erros durante a indexação e operação de algumas funções. Portanto, é sempre desejável que simplifiquemos estes nomes e tornemos eles consistentes, para evitar possíveis dores de cabeça. Para isso, quatro funções podem ser bastante úteis: <code>tolower</code>, <code>toupper</code>, <code>make.names</code> e <code>abbreviate</code>.</li>
@@ -331,7 +331,7 @@ exemplo</pre>
 ##  [9] &quot;Agraria&quot;                                 
 ## [10] &quot;Agroforestry Systems&quot;</pre>
 
-</article></slide><slide class=""><hgroup><h2>Substituição de valores</h2></hgroup><article  id="substituicao-de-valores-4">
+</article></slide><slide class=""><hgroup><h2>Edição de valores em um vetor</h2></hgroup><article  id="edicao-de-valores-em-um-vetor-1">
 
 <pre class = 'prettyprint lang-r'># tolower faz com que todos os caracteres fiquem em caixa baixa
 tolower(exemplo)
@@ -348,7 +348,7 @@ abbreviate(exemplo)</pre>
 <li>Observe que os nomes das colunas do objeto <strong>projetos</strong> não são de todo consistentes. Você conseguiria modificar o nome dessas colunas, fazendo com que todos os caracteres ficassem em caixa baixa? Dica: utilize <code>names(projetos)</code> ou <code>colnames(projetos)</code> para visualizar o nome das colunas desse <code>data.frame</code>.</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Substituição de valores</h2></hgroup><article  id="substituicao-de-valores-5">
+</article></slide><slide class=""><hgroup><h2>Combinando vetores</h2></hgroup><article  id="combinando-vetores">
 
 <ul>
 <li>Você também pode unir informações presentes em dois ou mais vetores (ou colunas) em um único elemento, utilizando as funções <code>paste</code> e <code>paste0</code>. Como exemplo, vamos unir a sigla da Unidade da Federação com o nome da Cidade que estão no objeto <strong>projetos</strong>.</li>
@@ -380,10 +380,1977 @@ paste0(projetos$cidade, &quot;/&quot;, projetos$uf)</pre>
 ## 11             11       Salvador/BA
 ## 12             12 Belo Horizonte/MG</pre>
 
-</article></slide><slide class=""><hgroup><h2>Substituição de valores</h2></hgroup><article  id="substituicao-de-valores-6">
+</article></slide><slide class=""><hgroup><h2>Edição de vetores baseado em lógica</h2></hgroup><article  id="edicao-de-vetores-baseado-em-logica">
 
 <ul>
-<li>Finalmente, também podemos alterar os valores de uma</li>
+<li>Finalmente, também podemos editar e alterar os valores de uma coluna baseado em testes e argumentos lógicos.</li>
+<li>Uma função importante neste sentido é o <code>ifelse</code>.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>## um vetor contendo o sexo de 10 pessoas
+sexo &lt;- rep(x = c(&quot;M&quot;, &quot;F&quot;), each = 5)
+sexo</pre>
+
+<pre >##  [1] &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>## substituindo
+ifelse(test = sexo == &quot;M&quot;, yes = &quot;masculino&quot;, no = &quot;feminino&quot;)</pre>
+
+<pre >##  [1] &quot;masculino&quot; &quot;masculino&quot; &quot;masculino&quot; &quot;masculino&quot; &quot;masculino&quot;
+##  [6] &quot;feminino&quot;  &quot;feminino&quot;  &quot;feminino&quot;  &quot;feminino&quot;  &quot;feminino&quot;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 5</h2></hgroup><article  id="exercicio-5">
+
+<ul>
+<li>Adicione uma coluna ao objeto <strong>revistas</strong> que especifique se a revista em questão é nacional ou internacional.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Edição de vetores baseado em lógica</h2></hgroup><article  id="edicao-de-vetores-baseado-em-logica-1">
+
+<ul>
+<li>Mas o que acontece se tivéssemos três categorias diferentes de sexo?</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>## um vetor contendo o sexo de 15 pessoas
+sexo &lt;- rep(x = c(&quot;M&quot;, &quot;F&quot;, &quot;ND&quot;), each = 5)
+sexo</pre>
+
+<pre >##  [1] &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;ND&quot; &quot;ND&quot; &quot;ND&quot; &quot;ND&quot;
+## [15] &quot;ND&quot;</pre>
+
+<pre class = 'prettyprint lang-r'>## substituindo
+ifelse(test = sexo == &quot;M&quot;, yes = &quot;masculino&quot;, no = &quot;feminino&quot;)</pre>
+
+</article></slide><slide class=""><hgroup><h2>Edição de vetores baseado em lógica</h2></hgroup><article  id="edicao-de-vetores-baseado-em-logica-2">
+
+<ul>
+<li>Cada elemento de um vetor que não passa no teste do <code>ifelse</code> recebe o valor que determinamos. Portanto, quando temos um vetor com múltiplos valores e queremos substituir apenas um deles devemos fazer essa operação em cadeia.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'># se o resultado for verdadeiro substitua por &#39;masculino&#39;, caso contrario, substitua pelo valor de sexo naquela posicao
+(sexo &lt;- ifelse(test = sexo == &quot;M&quot;, yes = &quot;masculino&quot;, no = sexo))
+
+# se o resultado for verdadeiro substitua por &#39;feminino&#39;, caso contrario, substitua pelo valor de sexo naquela posicao
+(sexo &lt;- ifelse(test = sexo == &quot;F&quot;, yes = &quot;feminino&quot;, no = sexo))
+
+# se o resultado for verdadeiro substitua por &#39;feminino&#39;, caso contrario, substitua pelo valor de sexo naquela posicao
+(sexo &lt;- ifelse(test = sexo == &quot;ND&quot;, yes = &quot;não determinado&quot;, no = sexo))</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 6</h2></hgroup><article  id="exercicio-6">
+
+<ul>
+<li>Você consegue realizar a mesma operação que acabamos demonstrar sem criar um objeto a cada etapa?</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>## um vetor contendo o sexo de 15 pessoas
+sexo &lt;- rep(x = c(&quot;M&quot;, &quot;F&quot;, &quot;ND&quot;), each = 5)
+sexo</pre>
+
+<pre >##  [1] &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;M&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;F&quot;  &quot;ND&quot; &quot;ND&quot; &quot;ND&quot; &quot;ND&quot;
+## [15] &quot;ND&quot;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Editando todo o conteúdo das colunas de uma tabela</h2></hgroup><article  id="editando-todo-o-conteudo-das-colunas-de-uma-tabela">
+
+<ul>
+<li>O <code>ifelse</code> também pode ser aplicado à toda a tabela de dados, o que pode nos ajudar a transformar uma matriz de abundância em uma de presenca/ausência.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>ifelse(test = varespec &gt; 0, yes = 1, no = 0)</pre>
+
+<pre >##    Callvulg Empenigr Rhodtome Vaccmyrt Vaccviti Pinusylv Descflex Betupube
+## 18        1        1        0        0        1        1        0        0
+## 15        1        1        0        1        1        1        0        0
+## 24        1        1        0        0        1        1        0        0
+## 27        0        1        1        1        1        0        1        0
+## 23        0        1        0        0        1        1        0        0
+## 19        0        1        0        1        1        1        1        0
+## 22        1        1        1        1        1        1        1        1
+## 16        1        1        0        1        1        1        0        0
+## 28        0        1        1        1        1        1        1        0
+## 13        1        1        1        1        1        1        0        0</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 7</h2></hgroup><article  id="exercicio-7">
+
+<ul>
+<li>Uma tarefa muito comum para quem trabalha com ecologia de comunidades é quantificar a abundância total e a riqueza de espécies em uma dada comunidade. Nesse sentido, você poderia criar um <code>data.frame</code> com estas duas quantidades para cada comunidade apresentada no conjunto de dados <code>varespec</code>?
+
+<ul>
+<li>Dica: veja o arquivo de ajuda das funções <code>colSums</code> e <code>rowSums</code>.</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Métodos orientados à tabela de dados {#anchor3}</h2></hgroup><article  id="metodos-orientados-a-tabela-de-dados-anchor3" class="smaller">
+
+<ul>
+<li>As funções apresentadas anteriormente são úteis para realizar algumas manipulações básicas e mais comuns do conteúdo de um tabela. No entanto, existe muitas outras coisas que precisamos fazer durante a manipulação, limpeza e processamento de dados, onde muitas delas são feitas de forma complexa ou pouco intuitiva através das funções da <code>base</code> do R.</li>
+<li>Algumas dessas tarefas são:
+
+<ul>
+<li>Renomear o nome de uma coluna específica (na <code>base</code>, indexação);</li>
+<li>Ordenar uma tabela de acordo com uma ou mais colunas (na <code>base</code>, indexação + <code>sort</code> e/ou <code>order</code>);</li>
+<li>Selecionar algumas colunas específicas ou mudar a ordem delas (na <code>base</code>, indexação ou escrever o nome de cada uma - entre aspas);</li>
+<li>Filtrar uma tabela de dados de acordo com critérios lógicos (na <code>base</code>, indexação por lógica ou <code>subset</code>);</li>
+<li>Adicionar uma nova coluna a um conjunto de dados (na <code>base</code>, indexação);</li>
+<li>Realizar uma operação para cada nível de uma categoria que defina as observações (na <code>base</code>, loop ou funções loop (<code>by</code>, <code>apply</code>, <code>lapply</code>,&#8230;));</li>
+<li>Separar as informações de uma coluna em múltiplas colunas (na <code>base</code>, <code>strsplit</code> + <code>unlist</code> + <code>rbind.data.frame</code>);</li>
+<li>Transformar uma tabela de dados do formato largo para o formato longo e vice-versa.</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Métodos orientados à tabela de dados</h2></hgroup><article  id="metodos-orientados-a-tabela-de-dados" class="smaller">
+
+<ul>
+<li>Note que todas essas ações podem ser definidas por <strong>verbos</strong>, que foram implementas através dos pacotes <code>dplyr</code> e <code>tidyr</code> no <code>tidyverse</code>.
+
+<ul>
+<li><code>rename</code>: renomeia as colunas da tabela;</li>
+<li><code>arrange</code>: ordena as linhas de uma tabela de acordo com uma condição;<br/></li>
+<li><code>select</code>: seleciona uma ou mais colunas de acordo com seu nome ou com um padrão;</li>
+<li><code>filter</code>: filtra as linhas de acordo com uma ou mais condições;<br/></li>
+<li><code>mutate</code>: adiciona novas variáveis à tabela;<br/></li>
+<li><code>group_by</code>: agrupa observações antes de realizar opereações;<br/></li>
+<li><code>summarise</code>: sumariza múltiplos valores para um único;<br/></li>
+<li><code>separate</code>: separa uma coluna em múltiplas colunas;<br/></li>
+<li><code>spread</code>: transforma uma tabela do <strong>formato longo para o formato largo</strong>;<br/></li>
+<li><code>gather</code>: transforma uma tabela do <strong>formato largo para o formato longo</strong>.</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Funcionamento geral do verbos do <code>tidyverse</code></h2></hgroup><article  id="funcionamento-geral-do-verbos-do-tidyverse">
+
+<ul>
+<li>Unidade primária de manipulação é o <code>data.frame</code> e ou <code>tibble</code>, e as colunas presentes neles;</li>
+<li>Todo o verbo é interpretado através de <em>lazy evaluation</em>: a primeira coisa que você fornece para a função é o conjunto de dados; a partir daí, a própria função entende que tudo o que você for fazer é em referência às informações que estão ali - elimina a necessidade de indexação.</li>
+<li>A idéia geral aqui é encurtar o espaço entre o que você quer fazer e o resultado (ou seja, entre a pergunta e a resposta), sem importar o tamanho do conjunto de dados.</li>
+<li>Para provar estes pontos, vamos utilizar o conjunto de dados <code>gapminder</code> que carregamos no início da aula.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>gapminder</code></h2></hgroup><article  id="gapminder">
+
+<pre class = 'prettyprint lang-r'>gapminder</pre>
+
+<pre >## # A tibble: 1,704 x 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>rename</code></h2></hgroup><article  id="rename">
+
+<p>Utilizada para renomear colunas específicas, contornando a necessidade de indexação.</p>
+
+<pre class = 'prettyprint lang-r'>rename(.data = gapminder, pais = country, continente = continent, ano = year)</pre>
+
+<pre >## # A tibble: 1,704 x 6
+##    pais        continente   ano lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia        1952    28.8  8425333      779.
+##  2 Afghanistan Asia        1957    30.3  9240934      821.
+##  3 Afghanistan Asia        1962    32.0 10267083      853.
+##  4 Afghanistan Asia        1967    34.0 11537966      836.
+##  5 Afghanistan Asia        1972    36.1 13079460      740.
+##  6 Afghanistan Asia        1977    38.4 14880372      786.
+##  7 Afghanistan Asia        1982    39.9 12881816      978.
+##  8 Afghanistan Asia        1987    40.8 13867957      852.
+##  9 Afghanistan Asia        1992    41.7 16317921      649.
+## 10 Afghanistan Asia        1997    41.8 22227415      635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>arrange</code></h2></hgroup><article  id="arrange">
+
+<p>Utilizada para ordernar as linhas de uma tabela em ordem crescente ou decrescente.</p>
+
+<pre class = 'prettyprint lang-r'>arrange(.data = gapminder, year)</pre>
+
+<pre >## Warning: package &#39;bindrcpp&#39; was built under R version 3.4.4</pre>
+
+<pre >## # A tibble: 1,704 x 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Albania     Europe     1952    55.2  1282697     1601.
+##  3 Algeria     Africa     1952    43.1  9279525     2449.
+##  4 Angola      Africa     1952    30.0  4232095     3521.
+##  5 Argentina   Americas   1952    62.5 17876956     5911.
+##  6 Australia   Oceania    1952    69.1  8691212    10040.
+##  7 Austria     Europe     1952    66.8  6927772     6137.
+##  8 Bahrain     Asia       1952    50.9   120447     9867.
+##  9 Bangladesh  Asia       1952    37.5 46886859      684.
+## 10 Belgium     Europe     1952    68    8730405     8343.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>arrange</code></h2></hgroup><article  id="arrange-1">
+
+<p>Utilizada para ordernar as linhas de uma tabela em ordem crescente ou decrescente.</p>
+
+<pre class = 'prettyprint lang-r'>arrange(.data = gapminder, desc(year))</pre>
+
+<pre >## # A tibble: 1,704 x 6
+##    country     continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       2007    43.8  31889923      975.
+##  2 Albania     Europe     2007    76.4   3600523     5937.
+##  3 Algeria     Africa     2007    72.3  33333216     6223.
+##  4 Angola      Africa     2007    42.7  12420476     4797.
+##  5 Argentina   Americas   2007    75.3  40301927    12779.
+##  6 Australia   Oceania    2007    81.2  20434176    34435.
+##  7 Austria     Europe     2007    79.8   8199783    36126.
+##  8 Bahrain     Asia       2007    75.6    708573    29796.
+##  9 Bangladesh  Asia       2007    64.1 150448339     1391.
+## 10 Belgium     Europe     2007    79.4  10392226    33693.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>arrange</code></h2></hgroup><article  id="arrange-2">
+
+<p>Pode comportar tantas colunas quantas aquelas que você desejar.</p>
+
+<pre class = 'prettyprint lang-r'>arrange(.data = gapminder, desc(year), lifeExp)</pre>
+
+<pre >## # A tibble: 1,704 x 6
+##    country                  continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;                    &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Swaziland                Africa     2007    39.6  1133066     4513.
+##  2 Mozambique               Africa     2007    42.1 19951656      824.
+##  3 Zambia                   Africa     2007    42.4 11746035     1271.
+##  4 Sierra Leone             Africa     2007    42.6  6144562      863.
+##  5 Lesotho                  Africa     2007    42.6  2012649     1569.
+##  6 Angola                   Africa     2007    42.7 12420476     4797.
+##  7 Zimbabwe                 Africa     2007    43.5 12311143      470.
+##  8 Afghanistan              Asia       2007    43.8 31889923      975.
+##  9 Central African Republic Africa     2007    44.7  4369038      706.
+## 10 Liberia                  Africa     2007    45.7  3193942      415.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 8</h2></hgroup><article  id="exercicio-8">
+
+<ol>
+<li>Qual foi o projeto que mais gastou recursos dentre aqueles financiados pelo CNPq?</li>
+<li>Qual foi o coordenador que terminou o doutorado há mais tempo?</li>
+<li>Qual o coordenador que tem o maior índice H e não fez pós-doutorado?</li>
+</ol>
+
+</article></slide><slide class=""><hgroup><h2><code>select</code></h2></hgroup><article  id="select">
+
+<p>Utilizada para selecionar uma ou mais colunas de acordo com seu nome.</p>
+
+<pre class = 'prettyprint lang-r'># somente o pais, ano e gdp per capita
+select(.data = gapminder, country, year, gdpPercap)</pre>
+
+<pre >## # A tibble: 1,704 x 3
+##    country      year gdpPercap
+##    &lt;fct&gt;       &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan  1952      779.
+##  2 Afghanistan  1957      821.
+##  3 Afghanistan  1962      853.
+##  4 Afghanistan  1967      836.
+##  5 Afghanistan  1972      740.
+##  6 Afghanistan  1977      786.
+##  7 Afghanistan  1982      978.
+##  8 Afghanistan  1987      852.
+##  9 Afghanistan  1992      649.
+## 10 Afghanistan  1997      635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>select</code></h2></hgroup><article  id="select-1">
+
+<p>Utilizada para selecionar uma ou mais colunas de acordo com seu nome.</p>
+
+<pre class = 'prettyprint lang-r'># apenas algumas variáveis e reordenando elas
+select(.data = gapminder, gdpPercap, country:lifeExp)</pre>
+
+<pre >## # A tibble: 1,704 x 5
+##    gdpPercap country     continent  year lifeExp
+##        &lt;dbl&gt; &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;
+##  1      779. Afghanistan Asia       1952    28.8
+##  2      821. Afghanistan Asia       1957    30.3
+##  3      853. Afghanistan Asia       1962    32.0
+##  4      836. Afghanistan Asia       1967    34.0
+##  5      740. Afghanistan Asia       1972    36.1
+##  6      786. Afghanistan Asia       1977    38.4
+##  7      978. Afghanistan Asia       1982    39.9
+##  8      852. Afghanistan Asia       1987    40.8
+##  9      649. Afghanistan Asia       1992    41.7
+## 10      635. Afghanistan Asia       1997    41.8
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>select</code></h2></hgroup><article  id="select-2">
+
+<p>Também pode ser utilizada para selecionar colunas baseado em um padrão específico, utilizando os argumentos auxiliares:</p>
+
+<ul>
+<li><code>starts_with()</code>: seleciona colunas que comecem com um certo padrão em seu nome;</li>
+<li><code>ends_with()</code>: seleciona colunas que terminem com um certo padrão em seu nome;</li>
+<li><code>contains()</code>: seleciona colunas que contenham um certo padrão em seu nome.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 9</h2></hgroup><article  id="exercicio-9">
+
+<ul>
+<li>Do conjunto de dados do <code>gapminder</code>:
+
+<ul>
+<li>Remova apenas a coluna <code>country</code> de <code>gapminder</code>;</li>
+<li>Selecione as colunas <code>continent</code>, <code>year</code> e <code>pop</code>;</li>
+<li>Com o resultado da última operação, ordene as linhas de acordo com a ordem decrescente dos anos;</li>
+<li>Além de ordenar as linhas pela ordem crescente dos continentes, ordene agora também o tamanho da população.<br/></li>
+</ul></li>
+<li>Do conjunto de dados dos projetos, selecione a coluna com o ID do coordenador do projeto e todas as colunas que representam de recursos gastos em cada projeto.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>filter</code></h2></hgroup><article  id="filter">
+
+<p>Utilizada para filtrar uma tabela de acordo com as condições que você determina.</p>
+
+<pre class = 'prettyprint lang-r'># apenas os dados do Brasil
+filter(.data = gapminder, country == &quot;Brazil&quot;)</pre>
+
+<pre >## # A tibble: 12 x 6
+##    country continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Brazil  Americas   1952    50.9  56602560     2109.
+##  2 Brazil  Americas   1957    53.3  65551171     2487.
+##  3 Brazil  Americas   1962    55.7  76039390     3337.
+##  4 Brazil  Americas   1967    57.6  88049823     3430.
+##  5 Brazil  Americas   1972    59.5 100840058     4986.
+##  6 Brazil  Americas   1977    61.5 114313951     6660.
+##  7 Brazil  Americas   1982    63.3 128962939     7031.
+##  8 Brazil  Americas   1987    65.2 142938076     7807.
+##  9 Brazil  Americas   1992    67.1 155975974     6950.
+## 10 Brazil  Americas   1997    69.4 168546719     7958.
+## 11 Brazil  Americas   2002    71.0 179914212     8131.
+## 12 Brazil  Americas   2007    72.4 190010647     9066.</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>filter</code></h2></hgroup><article  id="filter-1">
+
+<p>Utilizada para filtrar uma tabela de acordo com as condições que você determina.</p>
+
+<pre class = 'prettyprint lang-r'># dados das Americas, apenas os 20 últimos anos
+filter(.data = gapminder, continent == &quot;Americas&quot;, year &gt; 1996)</pre>
+
+<pre >## # A tibble: 75 x 6
+##    country   continent  year lifeExp       pop gdpPercap
+##    &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+##  1 Argentina Americas   1997    73.3  36203463    10967.
+##  2 Argentina Americas   2002    74.3  38331121     8798.
+##  3 Argentina Americas   2007    75.3  40301927    12779.
+##  4 Bolivia   Americas   1997    62.0   7693188     3326.
+##  5 Bolivia   Americas   2002    63.9   8445134     3413.
+##  6 Bolivia   Americas   2007    65.6   9119152     3822.
+##  7 Brazil    Americas   1997    69.4 168546719     7958.
+##  8 Brazil    Americas   2002    71.0 179914212     8131.
+##  9 Brazil    Americas   2007    72.4 190010647     9066.
+## 10 Canada    Americas   1997    78.6  30305843    28955.
+## # ... with 65 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>filter</code></h2></hgroup><article  id="filter-2">
+
+<p>Utilizada para filtrar uma tabela de acordo com as condições que você determina.</p>
+
+<pre class = 'prettyprint lang-r'># dados das Americas e Europa, apenas os 20 últimos anos
+filter(.data = gapminder, continent == &quot;Americas&quot; | continent == &quot;Europe&quot;, year &gt; 1996)</pre>
+
+<pre >## # A tibble: 165 x 6
+##    country   continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Albania   Europe     1997    73.0  3428038     3193.
+##  2 Albania   Europe     2002    75.7  3508512     4604.
+##  3 Albania   Europe     2007    76.4  3600523     5937.
+##  4 Argentina Americas   1997    73.3 36203463    10967.
+##  5 Argentina Americas   2002    74.3 38331121     8798.
+##  6 Argentina Americas   2007    75.3 40301927    12779.
+##  7 Austria   Europe     1997    77.5  8069876    29096.
+##  8 Austria   Europe     2002    79.0  8148312    32418.
+##  9 Austria   Europe     2007    79.8  8199783    36126.
+## 10 Belgium   Europe     1997    77.5 10199787    27561.
+## # ... with 155 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>filter</code></h2></hgroup><article  id="filter-3">
+
+<p>Podemos utilizar o argumento lógico <code>%in%</code> para selecionar múltiplos elementos de uma mesma coluna.</p>
+
+<pre class = 'prettyprint lang-r'># dados das Americas Europa e Oceania, apenas os 20 últimos anos
+filter(.data = gapminder, continent %in% c(&quot;Americas&quot;, &quot;Europe&quot;, &quot;Oceania&quot;), year &gt; 1996)</pre>
+
+<pre >## # A tibble: 171 x 6
+##    country   continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Albania   Europe     1997    73.0  3428038     3193.
+##  2 Albania   Europe     2002    75.7  3508512     4604.
+##  3 Albania   Europe     2007    76.4  3600523     5937.
+##  4 Argentina Americas   1997    73.3 36203463    10967.
+##  5 Argentina Americas   2002    74.3 38331121     8798.
+##  6 Argentina Americas   2007    75.3 40301927    12779.
+##  7 Australia Oceania    1997    78.8 18565243    26998.
+##  8 Australia Oceania    2002    80.4 19546792    30688.
+##  9 Australia Oceania    2007    81.2 20434176    34435.
+## 10 Austria   Europe     1997    77.5  8069876    29096.
+## # ... with 161 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code class="smaller">filter</code></h2></hgroup><article  id="filter-4">
+
+<p>E podemos criar uma função para fazer o inverso do <code>%in%</code>!</p>
+
+<pre class = 'prettyprint lang-r'>## criando a função
+`%nin%` &lt;- Negate(f = `%in%`)
+
+## removendo os dados das Americas, Europa e Oceania
+filter(.data = gapminder, continent %nin% c(&quot;Americas&quot;, &quot;Europe&quot;, &quot;Oceania&quot;), year &gt; 1996)</pre>
+
+<pre >## # A tibble: 255 x 6
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1997    41.8 22227415      635.
+##  2 Afghanistan Asia       2002    42.1 25268405      727.
+##  3 Afghanistan Asia       2007    43.8 31889923      975.
+##  4 Algeria     Africa     1997    69.2 29072015     4797.
+##  5 Algeria     Africa     2002    71.0 31287142     5288.
+##  6 Algeria     Africa     2007    72.3 33333216     6223.
+##  7 Angola      Africa     1997    41.0  9875024     2277.
+##  8 Angola      Africa     2002    41.0 10866106     2773.
+##  9 Angola      Africa     2007    42.7 12420476     4797.
+## 10 Bahrain     Asia       1997    73.9   598561    20292.
+## # ... with 245 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 10</h2></hgroup><article  id="exercicio-10">
+
+<ul>
+<li>Quais foram os projetos financiados no estado do Rio de Janeiro?</li>
+<li>Quais os projetos financiados no estado do Rio de Janeiro foram coordenados por mulheres?</li>
+<li>Onde estão localizados os bolsistas de produtividade 1C ou 1D que mais gastaram recursos?</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>mutate</code></h2></hgroup><article  id="mutate">
+
+<p>Cria uma nova coluna na tabela de dados, inclusive usando as próprias colunas que estão sendo criadas dentro da função naquele momento.</p>
+
+<pre class = 'prettyprint lang-r'>mutate(.data = gapminder, log_gdp = log(gdpPercap), exp_gdp = exp(log_gdp))</pre>
+
+<pre >## # A tibble: 1,704 x 8
+##    country     continent  year lifeExp      pop gdpPercap log_gdp exp_gdp
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.    6.66    779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.    6.71    821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.    6.75    853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.    6.73    836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.    6.61    740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.    6.67    786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.    6.89    978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.    6.75    852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.    6.48    649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.    6.45    635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>transmute</code></h2></hgroup><article  id="transmute">
+
+<p>Similar ao <code>mutate</code>, mas elimina todas as outras colunas ao retornar o resultado</p>
+
+<pre class = 'prettyprint lang-r'>transmute(.data = gapminder, log_gdp = log(gdpPercap), exp_gdp = exp(log_gdp))</pre>
+
+<pre >## # A tibble: 1,704 x 2
+##    log_gdp exp_gdp
+##      &lt;dbl&gt;   &lt;dbl&gt;
+##  1    6.66    779.
+##  2    6.71    821.
+##  3    6.75    853.
+##  4    6.73    836.
+##  5    6.61    740.
+##  6    6.67    786.
+##  7    6.89    978.
+##  8    6.75    852.
+##  9    6.48    649.
+## 10    6.45    635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 11</h2></hgroup><article  id="exercicio-11">
+
+<ul>
+<li>Crie uma nova coluna na tabelas <strong>processos</strong> que seja a combinação das colunas <code>cidade</code> e <code>uf</code>.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>group_by</code></h2></hgroup><article  id="group_by">
+
+<p>Agrupa as observações de acordo com os níveis de uma ou mais variáveis presentes nas colunas. É excelente para ser combinado com outras funções.</p>
+
+<pre class = 'prettyprint lang-r'>group_by(.data = gapminder, continent)</pre>
+
+<pre >## # A tibble: 1,704 x 6
+## # Groups:   continent [5]
+##    country     continent  year lifeExp      pop gdpPercap
+##    &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan Asia       1952    28.8  8425333      779.
+##  2 Afghanistan Asia       1957    30.3  9240934      821.
+##  3 Afghanistan Asia       1962    32.0 10267083      853.
+##  4 Afghanistan Asia       1967    34.0 11537966      836.
+##  5 Afghanistan Asia       1972    36.1 13079460      740.
+##  6 Afghanistan Asia       1977    38.4 14880372      786.
+##  7 Afghanistan Asia       1982    39.9 12881816      978.
+##  8 Afghanistan Asia       1987    40.8 13867957      852.
+##  9 Afghanistan Asia       1992    41.7 16317921      649.
+## 10 Afghanistan Asia       1997    41.8 22227415      635.
+## # ... with 1,694 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>group_by</code> + <code>filter</code></h2></hgroup><article  id="group_by-filter">
+
+<pre class = 'prettyprint lang-r'>## quais sao os paises em cada continente que tiveram menor expectativa de vida em toda a serie
+filter(.data = group_by(.data = gapminder, continent), lifeExp == min(lifeExp))</pre>
+
+<pre >## # A tibble: 5 x 6
+## # Groups:   continent [5]
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Australia   Oceania    1952    69.1  8691212    10040.
+## 3 Haiti       Americas   1952    37.6  3201488     1840.
+## 4 Rwanda      Africa     1992    23.6  7290203      737.
+## 5 Turkey      Europe     1952    43.6 22235677     1969.</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 12</h2></hgroup><article  id="exercicio-12">
+
+<ul>
+<li>Quais são os coordenadores estrangeiros e brasileiros que tem indice H menor do que 15 e se terminaram o doutorado antes de 1990?</li>
+<li>Quais são os coordenadores que mais gastaram recursos por classe de bolsa de produtividade?</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>group_by</code> + <code>summarise</code></h2></hgroup><article  id="group_by-summarise">
+
+<p>Uma das grandes vantagens do <code>group_by</code> é observada quando combinamos ele com a função <code>summarise</code>, que aplica uma mesma função para cada nível da variável agrupadora e retorna uma tabela com o sumário estatístico.</p>
+
+<pre class = 'prettyprint lang-r'>## expectativade vida media por continente
+summarise(.data = group_by(.data = gapminder, continent), expectativa_media = mean(lifeExp))</pre>
+
+<pre >## # A tibble: 5 x 2
+##   continent expectativa_media
+##   &lt;fct&gt;                 &lt;dbl&gt;
+## 1 Africa                 48.9
+## 2 Americas               64.7
+## 3 Asia                   60.1
+## 4 Europe                 71.9
+## 5 Oceania                74.3</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>group_by</code> + <code>summarise</code></h2></hgroup><article  id="group_by-summarise-1">
+
+<ul>
+<li>Podemos agrupar os dados de acordo com várias colunas.</li>
+<li>Para quebrar o agrupamento basta utilizarmos a função <code>ungroup</code>.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>## expectativamente de vida media por continente por ano
+summarise(.data = group_by(.data = gapminder, continent, year), expectativa_media = mean(lifeExp))</pre>
+
+<pre >## # A tibble: 60 x 3
+## # Groups:   continent [?]
+##    continent  year expectativa_media
+##    &lt;fct&gt;     &lt;int&gt;             &lt;dbl&gt;
+##  1 Africa     1952              39.1
+##  2 Africa     1957              41.3
+##  3 Africa     1962              43.3
+##  4 Africa     1967              45.3
+##  5 Africa     1972              47.5
+##  6 Africa     1977              49.6
+##  7 Africa     1982              51.6
+##  8 Africa     1987              53.3
+##  9 Africa     1992              53.6
+## 10 Africa     1997              53.6
+## # ... with 50 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 13</h2></hgroup><article  id="exercicio-13">
+
+<ul>
+<li>Utilizando o objeto <strong>revistas</strong>, adicione uma coluna indicando se cada revista é nacional ou estrangeira e calcule o índice SJR médio destas duas categorias.</li>
+<li>Calcule o índice H médio de coordenadores de projetos brasileiros e extrangeiros de acordo com o tipo de bolsa de produtividade recebido, e considerando apenas os coordenadores que terminaram o doutorado após o ano 2000.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>O operador <strong>pipe</strong>: <code>%&gt;%</code></h2></hgroup><article  id="o-operador-pipe">
+
+<ul>
+<li>Em toda língua, todo texto fica difícil de compreender quando emendarmos frases sem adicionar uma pontuação.</li>
+<li>Acabamos de ver isso acontecendo também quando utilizamos a linguagem R, ao utilizarmos resultado de um verbo diretamente no processamento de outro verbo do <code>tidyverse</code>.</li>
+<li>Isso faz com que todo o código que escrevamos rapidamente fique complexo demais de se ler ou, ainda, exija a criação de diversas etapas intermediárias.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>## muito complexo
+summarise(.data = group_by(.data = select(.data = gapminder, country, continent, gdpPercap), continent, country), 
+          media_gdp = mean(gdpPercap))
+
+## muito enfadonho
+passo1 &lt;- select(.data = gapminder, country, continent, gdpPercap) 
+passo2 &lt;- group_by(.data = passo1, continent, country)
+passo3 &lt;- summarise(.data = passo2, media_gdp = mean(gdpPercap))</pre>
+
+</article></slide><slide class=""><hgroup><h2>O operador <strong>pipe</strong>: <code>%&gt;%</code></h2></hgroup><article  id="o-operador-pipe-1">
+
+<ul>
+<li>A fim de descomplicar a escrita do código e fazer com que ele fique mais claro, o operador <code>pipe</code> é implementado no ambiente de trabalho quando você carrega o <code>tidyverse</code>.</li>
+<li>O operador <code>pipe</code>, representado pelo símbolo <code>%&gt;%</code>, é implementado especificamente através do pacote <code>dplyr</code>.</li>
+<li>O atalho do teclado para o <code>pipe</code> é <strong>Control + Shift + M</strong> (no Windows) ou <strong>Command + Shift + M</strong> (no MAC).</li>
+<li>Um exemplo do uso do <code>pipe</code> no mesmo contexto apresentado no slide anterior:</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>gapminder %&gt;% 
+  select(country, continent, gdpPercap) %&gt;% 
+  group_by(continent, country) %&gt;% 
+  summarise(media_gdp = mean(gdpPercap))</pre>
+
+</article></slide><slide class=""><hgroup><h2>O operador <strong>pipe</strong>: <code>%&gt;%</code></h2></hgroup><article  id="o-operador-pipe-2">
+
+<ul>
+<li>O <code>pipe</code> funciona potencializando o <em>lazy evaluation</em> nos verbos do <code>tidyverse</code>.</li>
+<li>Ele passa o <code>data.frame</code>/<code>tibble</code> de uma linha de comando ou resultante do processamento de um verbo para o argumento <code>.data</code> do verbo que o segue - assim como a pontuação e adjuntos conectam frases no português.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>gapminder %&gt;% 
+  select(country, continent, gdpPercap) %&gt;% 
+  group_by(continent, country) %&gt;% 
+  summarise(media_gdp = mean(gdpPercap))</pre>
+
+</article></slide><slide class=""><hgroup><h2>O operador <strong>pipe</strong>: <code class="smaller">%&gt;%</code></h2></hgroup><article  id="o-operador-pipe-3">
+
+<ul>
+<li>Como veremos nas outras aulas, o <code>pipe</code> também pode ser empregado no processamento de outras funções, incluindo a extração e processamento de resultados de análises.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>gapminder %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(expectativa = mean(lifeExp), gdp = mean(gdpPercap)) %&gt;% 
+  lm(gdp ~ expectativa, data = .) %&gt;% 
+  summary(.)</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 14</h2></hgroup><article  id="exercicio-14">
+
+<ul>
+<li>Determine o número médio, mínimo e máximo do número de citações recebidas em cada uma das revistas onde os artigos científicos foram publicados (dados presentes no objeto __publicacoes).<br/></li>
+<li>Repita o procedimento acima, mas calcule também o desvio padrão e o número total de artigos publicados em cada revista (utilize a função <code>n()</code> para tal).</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code>drop_na</code></h2></hgroup><article  id="drop_na">
+
+<ul>
+<li>Uma das formas de remover as linhas contendo <code>NA</code> na <code>base</code> do R é através da indexação por lógica, utilizando o <code>is.na</code>.</li>
+<li>Você pode fazer a mesma coisa no <code>tidyverse</code>, utilizando a função <code>drop_na</code> - especificando inclusive de qual coluna você quer que os <code>NA</code> sejam removidas.</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>drop_na(data = publicacoes, citacoes)</pre>
+
+<pre >## # A tibble: 548 x 6
+##       Processo    id titulo                    journal      ISSN  citacoes
+##          &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                     &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt;
+##  1 40060020137     1 Larval Biology of Anthop… Journal of … 1536…        4
+##  2 40060020137     2 Seasonal variation in di… Biotropica   0106…        0
+##  3 40060020137     3 Biology of the immature … Revista Bra… 0085…        3
+##  4 40060020137     4 Immature Stages and Ecol… Journal of … 0024…        0
+##  5 40060020137     5 Importance of Habitat He… Environment… 0046…        2
+##  6 40060020137     6 Sexual Dimorphism and Al… Journal of … 1536…        0
+##  7 40060020137     7 Species composition and … Zoologia (C… 1984…        3
+##  8 40060020137     8 Temporal Dynamics of Fru… Florida Ent… 0015…        0
+##  9 40060020137     9 Temporal Occurrence of T… Environment… 0046…        2
+## 10 40060020137    10 The Abundance of Special… Florida Ent… 0015…        0
+## # ... with 538 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2><code class="smaller">separate</code></h2></hgroup><article  id="separate">
+
+<p>Utilizado para separar as informações de uma coluna em várias colunas diferentes.</p>
+
+<pre class = 'prettyprint lang-r'>projetos %&gt;% 
+  separate(col = inicio, into = c(&quot;dia&quot;, &quot;mes&quot;, &quot;ano&quot;), sep = &quot;/&quot;)</pre>
+
+<pre >## # A tibble: 119 x 28
+##     processo chamada        id_coordenador sexo  dia   mes   ano   termino
+##        &lt;dbl&gt; &lt;chr&gt;                   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+##  1   4.86e10 Universal - F…              1 M     06    11    12    05/11/…
+##  2   4.01e10 BJT                         2 F     12    09    12    11/09/…
+##  3   4.82e10 Universal - F…              3 M     08    11    13    30/11/…
+##  4   4.72e10 Universal - F…              4 F     14    12    12    31/12/…
+##  5   4.76e10 Universal - F…              5 M     30    10    13    31/10/…
+##  6   4.82e10 Universal - F…              6 M     07    05    13    05/05/…
+##  7   4.80e10 Universal - F…              7 M     19    11    12    18/11/…
+##  8   4.46e10 Incubadoras                 8 M     02    08    16    31/12/…
+##  9   4.58e10 PPBio - Rede …              9 M     12    12    12    11/12/…
+## 10   4.72e10 Universal - F…             10 M     28    11    12    30/11/…
+## # ... with 109 more rows, and 20 more variables: instituicao &lt;chr&gt;,
+## #   uf &lt;chr&gt;, cidade &lt;chr&gt;, regiao &lt;chr&gt;, duracao &lt;int&gt;, brasileiro &lt;chr&gt;,
+## #   produtividade &lt;chr&gt;, doutorado &lt;int&gt;, doutorado_exterior &lt;chr&gt;,
+## #   sanduiche &lt;chr&gt;, posdoc &lt;chr&gt;, indiceh &lt;int&gt;, bolsa_contratado &lt;dbl&gt;,
+## #   bolsa_gasto &lt;int&gt;, capital_contratado &lt;dbl&gt;, capital_gasto &lt;dbl&gt;,
+## #   custeio_contratado &lt;dbl&gt;, custeio_gasto &lt;dbl&gt;, total_fornecido &lt;dbl&gt;,
+## #   total_gasto &lt;dbl&gt;</pre>
+
+</article></slide><slide class=""><hgroup><h2><code>rownames_to_column</code></h2></hgroup><article  id="rownames_to_column">
+
+<p>Por padrão, um <code>tibble</code> não comporta nomes nas linhas, o que pode ser particularmente problemático quando convertemos um <code>data.frame</code> para àquela classe de objeto. No entanto, podemos usar a função <code>rownames_to_column</code> para adicionar uma coluna que contenha o nome de cada linha.</p>
+
+<pre class = 'prettyprint lang-r'>varespec &lt;- varespec %&gt;% 
+  rownames_to_column(var = &quot;site&quot;)
+varespec</pre>
+
+<pre >##    site Callvulg Empenigr Rhodtome Vaccmyrt Vaccviti Pinusylv Descflex
+## 1    18     0.55    11.13     0.00     0.00    17.80     0.07     0.00
+## 2    15     0.67     0.17     0.00     0.35    12.13     0.12     0.00
+## 3    24     0.10     1.55     0.00     0.00    13.47     0.25     0.00
+## 4    27     0.00    15.13     2.42     5.92    15.97     0.00     3.70
+## 5    23     0.00    12.68     0.00     0.00    23.73     0.03     0.00
+## 6    19     0.00     8.92     0.00     2.42    10.28     0.12     0.02
+## 7    22     4.73     5.12     1.55     6.05    12.40     0.10     0.78
+## 8    16     4.47     7.33     0.00     2.15     4.33     0.10     0.00
+## 9    28     0.00     1.63     0.35    18.27     7.13     0.05     0.40
+## 10   13    24.13     1.90     0.07     0.22     5.30     0.12     0.00
+## 11   14     3.75     5.65     0.00     0.08     5.30     0.10     0.00
+## 12   20     0.02     6.45     0.00     0.00    14.13     0.07     0.00
+## 13   25     0.00     6.93     0.00     0.00    10.60     0.02     0.10
+## 14    7     0.00     5.30     0.00     0.00     8.20     0.00     0.05
+## 15    5     0.00     0.13     0.00     0.00     2.75     0.03     0.00
+## 16    6     0.30     5.75     0.00     0.00    10.50     0.10     0.00
+## 17    3     0.03     3.65     0.00     0.00     4.43     0.00     0.00
+## 18    4     3.40     0.63     0.00     0.00     1.98     0.05     0.05
+## 19    2     0.05     9.30     0.00     0.00     8.50     0.03     0.00
+## 20    9     0.00     3.47     0.00     0.25    20.50     0.25     0.00
+## 21   12     0.25    11.50     0.00     0.00    15.80     1.20     0.00
+## 22   10     0.25    11.00     0.00     0.00    11.90     0.25     0.00
+## 23   11     2.37     0.67     0.00     0.00    12.90     0.80     0.00
+## 24   21     0.00    16.00     4.00    15.00    25.00     0.25     0.50
+##    Betupube Vacculig Diphcomp Dicrsp Dicrfusc Dicrpoly Hylosple Pleuschr
+## 1      0.00     1.60     2.07   0.00     1.62     0.00     0.00     4.67
+## 2      0.00     0.00     0.00   0.33    10.92     0.02     0.00    37.75
+## 3      0.00     0.00     0.00  23.43     0.00     1.68     0.00    32.92
+## 4      0.00     1.12     0.00   0.00     3.63     0.00     6.70    58.07
+## 5      0.00     0.00     0.00   0.00     3.42     0.02     0.00    19.42
+## 6      0.00     0.00     0.00   0.00     0.32     0.02     0.00    21.03
+## 7      0.02     2.00     0.00   0.03    37.07     0.00     0.00    26.38
+## 8      0.00     0.00     0.00   1.02    25.80     0.23     0.00    18.98
+## 9      0.00     0.20     0.00   0.30     0.52     0.20     9.97    70.03
+## 10     0.00     0.00     0.07   0.02     2.50     0.00     0.00     5.52
+## 11     0.00     0.00     0.00   0.00    11.32     0.00     0.00     7.75
+## 12     0.00     0.47     0.00   0.85     1.87     0.08     1.35    13.73
+## 13     0.02     0.05     0.07  14.02    10.82     0.00     0.02    28.77
+## 14     0.00     8.10     0.28   0.00     0.45     0.03     0.00     0.10
+## 15     0.00     0.00     0.00   0.00     0.25     0.03     0.00     0.03
+## 16     0.00     0.00     0.00   0.00     0.85     0.00     0.00     0.05
+## 17     0.00     1.65     0.50   0.00     0.55     0.00     0.00     0.05
+## 18     0.00     0.03     0.00   0.00     0.20     0.00     0.00     1.53
+## 19     0.00     0.00     0.00   0.00     0.03     0.00     0.00     0.75
+## 20     0.00     0.00     0.25   0.00     0.38     0.25     0.00     4.07
+## 21     0.00     0.00     0.00   0.25     0.25     0.00     0.00     6.00
+## 22     0.00     0.00     0.00   0.00     0.25     0.25     0.00     0.67
+## 23     0.00     0.00     0.00   0.00     0.25     0.25     0.00    17.70
+## 24     0.25     0.00     0.00   0.25     0.25     3.00     0.00     2.00
+##    Polypili Polyjuni Polycomm Pohlnuta Ptilcili Barbhatc Cladarbu Cladrang
+## 1      0.02     0.13     0.00     0.13     0.12     0.00    21.73    21.47
+## 2      0.02     0.23     0.00     0.03     0.02     0.00    12.05     8.13
+## 3      0.00     0.23     0.00     0.32     0.03     0.00     3.58     5.52
+## 4      0.00     0.00     0.13     0.02     0.08     0.08     1.42     7.63
+## 5      0.02     2.12     0.00     0.17     1.80     0.02     9.08     9.22
+## 6      0.02     1.58     0.18     0.07     0.27     0.02     7.23     4.95
+## 7      0.00     0.00     0.00     0.10     0.03     0.00     6.10     3.60
+## 8      0.00     0.02     0.00     0.13     0.10     0.00     7.13    14.03
+## 9      0.00     0.08     0.00     0.07     0.03     0.00     0.17     0.87
+## 10     0.00     0.02     0.00     0.03     0.25     0.07    23.07    23.67
+## 11     0.00     0.30     0.02     0.07     0.00     0.00    17.45     1.32
+## 12     0.07     0.05     0.00     0.12     0.00     0.00     6.80    11.22
+## 13     0.00     6.98     0.13     0.00     0.22     0.00     6.00     2.25
+## 14     0.00     0.25     0.00     0.03     0.00     0.00    35.00    42.50
+## 15     0.18     0.65     0.00     0.00     0.00     0.00    18.50    59.00
+## 16     0.03     0.08     0.00     0.00     0.08     0.00    39.00    37.50
+## 17     0.00     0.00     0.00     0.03     0.03     0.00     8.80    29.50
+## 18     0.00     0.10     0.00     0.05     0.00     0.00    15.73    20.03
+## 19     0.00     0.03     0.00     0.00     0.03     0.00     0.48    24.50
+## 20     0.00     0.25     0.00     0.25     0.25     0.00     0.46     4.00
+## 21     0.00     0.00     0.00     0.25     0.00     0.00     3.60    14.60
+## 22     0.00     0.25     0.00     0.25     0.00     0.00     1.30     8.70
+## 23     0.25     0.25     0.00     0.25     0.67     0.00     9.67    29.80
+## 24     0.00     0.25     0.25     0.25    10.00     3.00     0.70     4.70
+##    Cladstel Cladunci Cladcocc Cladcorn Cladgrac Cladfimb Cladcris Cladchlo
+## 1      3.50     0.30     0.18     0.23     0.25     0.25     0.23     0.00
+## 2      0.18     2.65     0.13     0.18     0.23     0.25     1.23     0.00
+## 3      0.07     8.93     0.00     0.20     0.48     0.00     0.07     0.10
+## 4      2.55     0.15     0.00     0.38     0.12     0.10     0.03     0.00
+## 5      0.05     0.73     0.08     1.42     0.50     0.17     1.78     0.05
+## 6     22.08     0.25     0.10     0.25     0.18     0.10     0.12     0.05
+## 7      0.23     2.38     0.17     0.13     0.18     0.20     0.20     0.02
+## 8      0.02     0.82     0.15     0.05     0.22     0.22     0.17     0.00
+## 9      0.00     0.05     0.02     0.03     0.07     0.10     0.02     0.00
+## 10    11.90     0.95     0.17     0.05     0.23     0.18     0.57     0.02
+## 11     0.12    23.68     0.22     0.50     0.15     0.23     0.97     0.00
+## 12     0.05     4.75     0.03     0.12     0.22     0.18     0.07     0.00
+## 13     0.00     0.80     0.12     0.57     0.17     0.15     0.07     0.00
+## 14     0.28     0.35     0.08     0.20     0.25     0.18     0.13     0.08
+## 15     0.98     0.28     0.23     0.23     0.23     0.10     0.05     0.00
+## 16    11.30     3.45     0.18     0.20     0.25     0.25     0.23     0.03
+## 17    55.60     0.25     0.08     0.25     0.25     0.15     0.10     0.03
+## 18    28.20     0.73     0.10     0.15     0.13     0.10     0.15     0.00
+## 19    75.00     0.20     0.00     0.03     0.03     0.05     0.03     0.03
+## 20    84.30     0.25     0.25     0.25     0.25     0.25     0.25     0.25
+## 21    63.30     1.30     0.00     0.25     0.25     0.25     0.25     0.00
+## 22    84.30     0.25     0.25     0.25     0.00     0.25     0.25     0.25
+## 23    31.80     2.53     0.25     0.25     0.25     0.00     0.25     0.00
+## 24    10.90     0.25     0.00     0.05     0.25     0.25     0.25     0.25
+##    Cladbotr Cladamau Cladsp Cetreric Cetrisla Flavniva Nepharct Stersp
+## 1      0.00     0.08   0.02     0.02     0.00     0.12     0.02   0.62
+## 2      0.00     0.00   0.00     0.15     0.03     0.00     0.00   0.85
+## 3      0.02     0.00   0.00     0.78     0.12     0.00     0.00   0.03
+## 4      0.02     0.00   0.02     0.00     0.00     0.00     0.00   0.00
+## 5      0.05     0.00   0.00     0.00     0.00     0.02     0.00   1.58
+## 6      0.02     0.00   0.00     0.00     0.00     0.02     0.00   0.28
+## 7      0.00     0.00   0.02     0.02     0.00     0.00     0.00   0.00
+## 8      0.00     0.00   0.02     0.18     0.08     0.00     0.00   0.03
+## 9      0.02     0.00   0.00     0.00     0.02     0.00     0.00   0.02
+## 10     0.07     0.00   0.07     0.18     0.02     0.00     0.00   0.03
+## 11     0.00     0.00   0.00     0.68     0.02     0.00     0.00   0.33
+## 12     0.02     0.00   0.02     0.15     0.00     0.00     0.02   0.00
+## 13     0.00     0.00   0.02     0.03     0.02     0.00     4.87   0.10
+## 14     0.00     0.00   0.00     0.05     0.00     0.23     0.20   0.93
+## 15     0.00     0.03   0.00     0.18     0.00     0.28     0.00  10.28
+## 16     0.00     0.00   0.03     0.35     0.00     0.08     0.00   0.03
+## 17     0.00     0.03   0.00     0.05     0.00     0.15     0.15   0.28
+## 18     0.00     0.00   0.05     0.28     0.05    10.03     0.00   0.95
+## 19     0.00     0.00   0.00     0.00     0.00     0.00     0.00   0.00
+## 20     0.00     0.00   0.25     0.25     0.25     0.67     0.00   0.00
+## 21     0.00     0.00   0.00     0.00     0.25     0.00     0.00   0.00
+## 22     0.00     0.00   0.00     0.25     0.25     0.25     0.00   0.25
+## 23     0.00     0.00   0.00     0.00     0.25     0.00     0.00   0.93
+## 24     0.25     0.00   0.00     0.00     0.67     0.00     0.00   0.00
+##    Peltapht Icmaeric Cladcerv Claddefo Cladphyl
+## 1      0.02     0.00     0.00     0.25     0.00
+## 2      0.00     0.00     0.00     1.00     0.00
+## 3      0.00     0.00     0.00     0.33     0.00
+## 4      0.07     0.00     0.00     0.15     0.00
+## 5      0.33     0.00     0.00     1.97     0.00
+## 6      0.00     0.00     0.00     0.37     0.00
+## 7      0.00     0.00     0.00     0.15     0.00
+## 8      0.00     0.07     0.00     0.67     0.00
+## 9      0.00     0.00     0.00     0.08     0.00
+## 10     0.02     0.00     0.00     0.47     0.00
+## 11     0.00     0.02     0.00     1.57     0.05
+## 12     0.00     0.00     0.00     1.20     0.00
+## 13     0.07     0.00     0.02     0.05     0.00
+## 14     0.00     0.03     0.00     0.10     0.00
+## 15     0.00     0.10     0.00     0.25     0.00
+## 16     0.00     0.00     0.00     0.28     0.00
+## 17     0.00     0.00     0.00     0.08     0.00
+## 18     0.00     0.00     0.05     0.08     0.00
+## 19     0.00     0.00     0.03     0.03     0.00
+## 20     0.00     0.00     0.00     0.25     0.25
+## 21     0.00     0.00     0.00     0.25     0.00
+## 22     0.00     0.00     0.00     0.25     0.25
+## 23     0.25     0.00     0.00     0.00     0.25
+## 24     0.00     0.00     0.00     0.40     0.00</pre>
+
+</article></slide><slide class=""><hgroup><h2>De largo para longo, e de volta outra vez</h2></hgroup><article  id="anchor4">
+
+<ul>
+<li>Uma tarefa que normalmente precisamos fazer é também converter uma tabela do formato largo para o formato longo e vice-versa.</li>
+<li>Além disso, as vezes é mais fácil converter uma tabela para um desses formatos para realizar rapidamente um processamento ou manipulação de dados (e.g., aplicar uma mesma transformação apenas às colunas que contenham números).</li>
+<li>Existem duas funções que podem nos ajudar nesse sentido:
+
+<ul>
+<li><code>gather</code>, para juntar as informações de múltiplas colunas em uma única coluna;</li>
+<li><code>spread</code>, para espalhar as informações de uma única coluna para múltiplas colunas.</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2><code class="smaller">gather</code></h2></hgroup><article  id="gather">
+
+<pre class = 'prettyprint lang-r'>formato_longo &lt;- gather(data = varespec, key = &quot;especie&quot;, value = &quot;densidade&quot;, Callvulg:Cladphyl)
+formato_longo</pre>
+
+<pre >##      site  especie densidade
+## 1      18 Callvulg      0.55
+## 2      15 Callvulg      0.67
+## 3      24 Callvulg      0.10
+## 4      27 Callvulg      0.00
+## 5      23 Callvulg      0.00
+## 6      19 Callvulg      0.00
+## 7      22 Callvulg      4.73
+## 8      16 Callvulg      4.47
+## 9      28 Callvulg      0.00
+## 10     13 Callvulg     24.13
+## 11     14 Callvulg      3.75
+## 12     20 Callvulg      0.02
+## 13     25 Callvulg      0.00
+## 14      7 Callvulg      0.00
+## 15      5 Callvulg      0.00
+## 16      6 Callvulg      0.30
+## 17      3 Callvulg      0.03
+## 18      4 Callvulg      3.40
+## 19      2 Callvulg      0.05
+## 20      9 Callvulg      0.00
+## 21     12 Callvulg      0.25
+## 22     10 Callvulg      0.25
+## 23     11 Callvulg      2.37
+## 24     21 Callvulg      0.00
+## 25     18 Empenigr     11.13
+## 26     15 Empenigr      0.17
+## 27     24 Empenigr      1.55
+## 28     27 Empenigr     15.13
+## 29     23 Empenigr     12.68
+## 30     19 Empenigr      8.92
+## 31     22 Empenigr      5.12
+## 32     16 Empenigr      7.33
+## 33     28 Empenigr      1.63
+## 34     13 Empenigr      1.90
+## 35     14 Empenigr      5.65
+## 36     20 Empenigr      6.45
+## 37     25 Empenigr      6.93
+## 38      7 Empenigr      5.30
+## 39      5 Empenigr      0.13
+## 40      6 Empenigr      5.75
+## 41      3 Empenigr      3.65
+## 42      4 Empenigr      0.63
+## 43      2 Empenigr      9.30
+## 44      9 Empenigr      3.47
+## 45     12 Empenigr     11.50
+## 46     10 Empenigr     11.00
+## 47     11 Empenigr      0.67
+## 48     21 Empenigr     16.00
+## 49     18 Rhodtome      0.00
+## 50     15 Rhodtome      0.00
+## 51     24 Rhodtome      0.00
+## 52     27 Rhodtome      2.42
+## 53     23 Rhodtome      0.00
+## 54     19 Rhodtome      0.00
+## 55     22 Rhodtome      1.55
+## 56     16 Rhodtome      0.00
+## 57     28 Rhodtome      0.35
+## 58     13 Rhodtome      0.07
+## 59     14 Rhodtome      0.00
+## 60     20 Rhodtome      0.00
+## 61     25 Rhodtome      0.00
+## 62      7 Rhodtome      0.00
+## 63      5 Rhodtome      0.00
+## 64      6 Rhodtome      0.00
+## 65      3 Rhodtome      0.00
+## 66      4 Rhodtome      0.00
+## 67      2 Rhodtome      0.00
+## 68      9 Rhodtome      0.00
+## 69     12 Rhodtome      0.00
+## 70     10 Rhodtome      0.00
+## 71     11 Rhodtome      0.00
+## 72     21 Rhodtome      4.00
+## 73     18 Vaccmyrt      0.00
+## 74     15 Vaccmyrt      0.35
+## 75     24 Vaccmyrt      0.00
+## 76     27 Vaccmyrt      5.92
+## 77     23 Vaccmyrt      0.00
+## 78     19 Vaccmyrt      2.42
+## 79     22 Vaccmyrt      6.05
+## 80     16 Vaccmyrt      2.15
+## 81     28 Vaccmyrt     18.27
+## 82     13 Vaccmyrt      0.22
+## 83     14 Vaccmyrt      0.08
+## 84     20 Vaccmyrt      0.00
+## 85     25 Vaccmyrt      0.00
+## 86      7 Vaccmyrt      0.00
+## 87      5 Vaccmyrt      0.00
+## 88      6 Vaccmyrt      0.00
+## 89      3 Vaccmyrt      0.00
+## 90      4 Vaccmyrt      0.00
+## 91      2 Vaccmyrt      0.00
+## 92      9 Vaccmyrt      0.25
+## 93     12 Vaccmyrt      0.00
+## 94     10 Vaccmyrt      0.00
+## 95     11 Vaccmyrt      0.00
+## 96     21 Vaccmyrt     15.00
+## 97     18 Vaccviti     17.80
+## 98     15 Vaccviti     12.13
+## 99     24 Vaccviti     13.47
+## 100    27 Vaccviti     15.97
+## 101    23 Vaccviti     23.73
+## 102    19 Vaccviti     10.28
+## 103    22 Vaccviti     12.40
+## 104    16 Vaccviti      4.33
+## 105    28 Vaccviti      7.13
+## 106    13 Vaccviti      5.30
+## 107    14 Vaccviti      5.30
+## 108    20 Vaccviti     14.13
+## 109    25 Vaccviti     10.60
+## 110     7 Vaccviti      8.20
+## 111     5 Vaccviti      2.75
+## 112     6 Vaccviti     10.50
+## 113     3 Vaccviti      4.43
+## 114     4 Vaccviti      1.98
+## 115     2 Vaccviti      8.50
+## 116     9 Vaccviti     20.50
+## 117    12 Vaccviti     15.80
+## 118    10 Vaccviti     11.90
+## 119    11 Vaccviti     12.90
+## 120    21 Vaccviti     25.00
+## 121    18 Pinusylv      0.07
+## 122    15 Pinusylv      0.12
+## 123    24 Pinusylv      0.25
+## 124    27 Pinusylv      0.00
+## 125    23 Pinusylv      0.03
+## 126    19 Pinusylv      0.12
+## 127    22 Pinusylv      0.10
+## 128    16 Pinusylv      0.10
+## 129    28 Pinusylv      0.05
+## 130    13 Pinusylv      0.12
+## 131    14 Pinusylv      0.10
+## 132    20 Pinusylv      0.07
+## 133    25 Pinusylv      0.02
+## 134     7 Pinusylv      0.00
+## 135     5 Pinusylv      0.03
+## 136     6 Pinusylv      0.10
+## 137     3 Pinusylv      0.00
+## 138     4 Pinusylv      0.05
+## 139     2 Pinusylv      0.03
+## 140     9 Pinusylv      0.25
+## 141    12 Pinusylv      1.20
+## 142    10 Pinusylv      0.25
+## 143    11 Pinusylv      0.80
+## 144    21 Pinusylv      0.25
+## 145    18 Descflex      0.00
+## 146    15 Descflex      0.00
+## 147    24 Descflex      0.00
+## 148    27 Descflex      3.70
+## 149    23 Descflex      0.00
+## 150    19 Descflex      0.02
+## 151    22 Descflex      0.78
+## 152    16 Descflex      0.00
+## 153    28 Descflex      0.40
+## 154    13 Descflex      0.00
+## 155    14 Descflex      0.00
+## 156    20 Descflex      0.00
+## 157    25 Descflex      0.10
+## 158     7 Descflex      0.05
+## 159     5 Descflex      0.00
+## 160     6 Descflex      0.00
+## 161     3 Descflex      0.00
+## 162     4 Descflex      0.05
+## 163     2 Descflex      0.00
+## 164     9 Descflex      0.00
+## 165    12 Descflex      0.00
+## 166    10 Descflex      0.00
+## 167    11 Descflex      0.00
+## 168    21 Descflex      0.50
+## 169    18 Betupube      0.00
+## 170    15 Betupube      0.00
+## 171    24 Betupube      0.00
+## 172    27 Betupube      0.00
+## 173    23 Betupube      0.00
+## 174    19 Betupube      0.00
+## 175    22 Betupube      0.02
+## 176    16 Betupube      0.00
+## 177    28 Betupube      0.00
+## 178    13 Betupube      0.00
+## 179    14 Betupube      0.00
+## 180    20 Betupube      0.00
+## 181    25 Betupube      0.02
+## 182     7 Betupube      0.00
+## 183     5 Betupube      0.00
+## 184     6 Betupube      0.00
+## 185     3 Betupube      0.00
+## 186     4 Betupube      0.00
+## 187     2 Betupube      0.00
+## 188     9 Betupube      0.00
+## 189    12 Betupube      0.00
+## 190    10 Betupube      0.00
+## 191    11 Betupube      0.00
+## 192    21 Betupube      0.25
+## 193    18 Vacculig      1.60
+## 194    15 Vacculig      0.00
+## 195    24 Vacculig      0.00
+## 196    27 Vacculig      1.12
+## 197    23 Vacculig      0.00
+## 198    19 Vacculig      0.00
+## 199    22 Vacculig      2.00
+## 200    16 Vacculig      0.00
+## 201    28 Vacculig      0.20
+## 202    13 Vacculig      0.00
+## 203    14 Vacculig      0.00
+## 204    20 Vacculig      0.47
+## 205    25 Vacculig      0.05
+## 206     7 Vacculig      8.10
+## 207     5 Vacculig      0.00
+## 208     6 Vacculig      0.00
+## 209     3 Vacculig      1.65
+## 210     4 Vacculig      0.03
+## 211     2 Vacculig      0.00
+## 212     9 Vacculig      0.00
+## 213    12 Vacculig      0.00
+## 214    10 Vacculig      0.00
+## 215    11 Vacculig      0.00
+## 216    21 Vacculig      0.00
+## 217    18 Diphcomp      2.07
+## 218    15 Diphcomp      0.00
+## 219    24 Diphcomp      0.00
+## 220    27 Diphcomp      0.00
+## 221    23 Diphcomp      0.00
+## 222    19 Diphcomp      0.00
+## 223    22 Diphcomp      0.00
+## 224    16 Diphcomp      0.00
+## 225    28 Diphcomp      0.00
+## 226    13 Diphcomp      0.07
+## 227    14 Diphcomp      0.00
+## 228    20 Diphcomp      0.00
+## 229    25 Diphcomp      0.07
+## 230     7 Diphcomp      0.28
+## 231     5 Diphcomp      0.00
+## 232     6 Diphcomp      0.00
+## 233     3 Diphcomp      0.50
+## 234     4 Diphcomp      0.00
+## 235     2 Diphcomp      0.00
+## 236     9 Diphcomp      0.25
+## 237    12 Diphcomp      0.00
+## 238    10 Diphcomp      0.00
+## 239    11 Diphcomp      0.00
+## 240    21 Diphcomp      0.00
+## 241    18   Dicrsp      0.00
+## 242    15   Dicrsp      0.33
+## 243    24   Dicrsp     23.43
+## 244    27   Dicrsp      0.00
+## 245    23   Dicrsp      0.00
+## 246    19   Dicrsp      0.00
+## 247    22   Dicrsp      0.03
+## 248    16   Dicrsp      1.02
+## 249    28   Dicrsp      0.30
+## 250    13   Dicrsp      0.02
+## 251    14   Dicrsp      0.00
+## 252    20   Dicrsp      0.85
+## 253    25   Dicrsp     14.02
+## 254     7   Dicrsp      0.00
+## 255     5   Dicrsp      0.00
+## 256     6   Dicrsp      0.00
+## 257     3   Dicrsp      0.00
+## 258     4   Dicrsp      0.00
+## 259     2   Dicrsp      0.00
+## 260     9   Dicrsp      0.00
+## 261    12   Dicrsp      0.25
+## 262    10   Dicrsp      0.00
+## 263    11   Dicrsp      0.00
+## 264    21   Dicrsp      0.25
+## 265    18 Dicrfusc      1.62
+## 266    15 Dicrfusc     10.92
+## 267    24 Dicrfusc      0.00
+## 268    27 Dicrfusc      3.63
+## 269    23 Dicrfusc      3.42
+## 270    19 Dicrfusc      0.32
+## 271    22 Dicrfusc     37.07
+## 272    16 Dicrfusc     25.80
+## 273    28 Dicrfusc      0.52
+## 274    13 Dicrfusc      2.50
+## 275    14 Dicrfusc     11.32
+## 276    20 Dicrfusc      1.87
+## 277    25 Dicrfusc     10.82
+## 278     7 Dicrfusc      0.45
+## 279     5 Dicrfusc      0.25
+## 280     6 Dicrfusc      0.85
+## 281     3 Dicrfusc      0.55
+## 282     4 Dicrfusc      0.20
+## 283     2 Dicrfusc      0.03
+## 284     9 Dicrfusc      0.38
+## 285    12 Dicrfusc      0.25
+## 286    10 Dicrfusc      0.25
+## 287    11 Dicrfusc      0.25
+## 288    21 Dicrfusc      0.25
+## 289    18 Dicrpoly      0.00
+## 290    15 Dicrpoly      0.02
+## 291    24 Dicrpoly      1.68
+## 292    27 Dicrpoly      0.00
+## 293    23 Dicrpoly      0.02
+## 294    19 Dicrpoly      0.02
+## 295    22 Dicrpoly      0.00
+## 296    16 Dicrpoly      0.23
+## 297    28 Dicrpoly      0.20
+## 298    13 Dicrpoly      0.00
+## 299    14 Dicrpoly      0.00
+## 300    20 Dicrpoly      0.08
+## 301    25 Dicrpoly      0.00
+## 302     7 Dicrpoly      0.03
+## 303     5 Dicrpoly      0.03
+## 304     6 Dicrpoly      0.00
+## 305     3 Dicrpoly      0.00
+## 306     4 Dicrpoly      0.00
+## 307     2 Dicrpoly      0.00
+## 308     9 Dicrpoly      0.25
+## 309    12 Dicrpoly      0.00
+## 310    10 Dicrpoly      0.25
+## 311    11 Dicrpoly      0.25
+## 312    21 Dicrpoly      3.00
+## 313    18 Hylosple      0.00
+## 314    15 Hylosple      0.00
+## 315    24 Hylosple      0.00
+## 316    27 Hylosple      6.70
+## 317    23 Hylosple      0.00
+## 318    19 Hylosple      0.00
+## 319    22 Hylosple      0.00
+## 320    16 Hylosple      0.00
+## 321    28 Hylosple      9.97
+## 322    13 Hylosple      0.00
+## 323    14 Hylosple      0.00
+## 324    20 Hylosple      1.35
+## 325    25 Hylosple      0.02
+## 326     7 Hylosple      0.00
+## 327     5 Hylosple      0.00
+## 328     6 Hylosple      0.00
+## 329     3 Hylosple      0.00
+## 330     4 Hylosple      0.00
+## 331     2 Hylosple      0.00
+## 332     9 Hylosple      0.00
+## 333    12 Hylosple      0.00
+## 334    10 Hylosple      0.00
+## 335    11 Hylosple      0.00
+## 336    21 Hylosple      0.00
+## 337    18 Pleuschr      4.67
+## 338    15 Pleuschr     37.75
+## 339    24 Pleuschr     32.92
+## 340    27 Pleuschr     58.07
+## 341    23 Pleuschr     19.42
+## 342    19 Pleuschr     21.03
+## 343    22 Pleuschr     26.38
+## 344    16 Pleuschr     18.98
+## 345    28 Pleuschr     70.03
+## 346    13 Pleuschr      5.52
+## 347    14 Pleuschr      7.75
+## 348    20 Pleuschr     13.73
+## 349    25 Pleuschr     28.77
+## 350     7 Pleuschr      0.10
+## 351     5 Pleuschr      0.03
+## 352     6 Pleuschr      0.05
+## 353     3 Pleuschr      0.05
+## 354     4 Pleuschr      1.53
+## 355     2 Pleuschr      0.75
+## 356     9 Pleuschr      4.07
+## 357    12 Pleuschr      6.00
+## 358    10 Pleuschr      0.67
+## 359    11 Pleuschr     17.70
+## 360    21 Pleuschr      2.00
+## 361    18 Polypili      0.02
+## 362    15 Polypili      0.02
+## 363    24 Polypili      0.00
+## 364    27 Polypili      0.00
+## 365    23 Polypili      0.02
+## 366    19 Polypili      0.02
+## 367    22 Polypili      0.00
+## 368    16 Polypili      0.00
+## 369    28 Polypili      0.00
+## 370    13 Polypili      0.00
+## 371    14 Polypili      0.00
+## 372    20 Polypili      0.07
+## 373    25 Polypili      0.00
+## 374     7 Polypili      0.00
+## 375     5 Polypili      0.18
+## 376     6 Polypili      0.03
+## 377     3 Polypili      0.00
+## 378     4 Polypili      0.00
+## 379     2 Polypili      0.00
+## 380     9 Polypili      0.00
+## 381    12 Polypili      0.00
+## 382    10 Polypili      0.00
+## 383    11 Polypili      0.25
+## 384    21 Polypili      0.00
+## 385    18 Polyjuni      0.13
+## 386    15 Polyjuni      0.23
+## 387    24 Polyjuni      0.23
+## 388    27 Polyjuni      0.00
+## 389    23 Polyjuni      2.12
+## 390    19 Polyjuni      1.58
+## 391    22 Polyjuni      0.00
+## 392    16 Polyjuni      0.02
+## 393    28 Polyjuni      0.08
+## 394    13 Polyjuni      0.02
+## 395    14 Polyjuni      0.30
+## 396    20 Polyjuni      0.05
+## 397    25 Polyjuni      6.98
+## 398     7 Polyjuni      0.25
+## 399     5 Polyjuni      0.65
+## 400     6 Polyjuni      0.08
+## 401     3 Polyjuni      0.00
+## 402     4 Polyjuni      0.10
+## 403     2 Polyjuni      0.03
+## 404     9 Polyjuni      0.25
+## 405    12 Polyjuni      0.00
+## 406    10 Polyjuni      0.25
+## 407    11 Polyjuni      0.25
+## 408    21 Polyjuni      0.25
+## 409    18 Polycomm      0.00
+## 410    15 Polycomm      0.00
+## 411    24 Polycomm      0.00
+## 412    27 Polycomm      0.13
+## 413    23 Polycomm      0.00
+## 414    19 Polycomm      0.18
+## 415    22 Polycomm      0.00
+## 416    16 Polycomm      0.00
+## 417    28 Polycomm      0.00
+## 418    13 Polycomm      0.00
+## 419    14 Polycomm      0.02
+## 420    20 Polycomm      0.00
+## 421    25 Polycomm      0.13
+## 422     7 Polycomm      0.00
+## 423     5 Polycomm      0.00
+## 424     6 Polycomm      0.00
+## 425     3 Polycomm      0.00
+## 426     4 Polycomm      0.00
+## 427     2 Polycomm      0.00
+## 428     9 Polycomm      0.00
+## 429    12 Polycomm      0.00
+## 430    10 Polycomm      0.00
+## 431    11 Polycomm      0.00
+## 432    21 Polycomm      0.25
+## 433    18 Pohlnuta      0.13
+## 434    15 Pohlnuta      0.03
+## 435    24 Pohlnuta      0.32
+## 436    27 Pohlnuta      0.02
+## 437    23 Pohlnuta      0.17
+## 438    19 Pohlnuta      0.07
+## 439    22 Pohlnuta      0.10
+## 440    16 Pohlnuta      0.13
+## 441    28 Pohlnuta      0.07
+## 442    13 Pohlnuta      0.03
+## 443    14 Pohlnuta      0.07
+## 444    20 Pohlnuta      0.12
+## 445    25 Pohlnuta      0.00
+## 446     7 Pohlnuta      0.03
+## 447     5 Pohlnuta      0.00
+## 448     6 Pohlnuta      0.00
+## 449     3 Pohlnuta      0.03
+## 450     4 Pohlnuta      0.05
+## 451     2 Pohlnuta      0.00
+## 452     9 Pohlnuta      0.25
+## 453    12 Pohlnuta      0.25
+## 454    10 Pohlnuta      0.25
+## 455    11 Pohlnuta      0.25
+## 456    21 Pohlnuta      0.25
+## 457    18 Ptilcili      0.12
+## 458    15 Ptilcili      0.02
+## 459    24 Ptilcili      0.03
+## 460    27 Ptilcili      0.08
+## 461    23 Ptilcili      1.80
+## 462    19 Ptilcili      0.27
+## 463    22 Ptilcili      0.03
+## 464    16 Ptilcili      0.10
+## 465    28 Ptilcili      0.03
+## 466    13 Ptilcili      0.25
+## 467    14 Ptilcili      0.00
+## 468    20 Ptilcili      0.00
+## 469    25 Ptilcili      0.22
+## 470     7 Ptilcili      0.00
+## 471     5 Ptilcili      0.00
+## 472     6 Ptilcili      0.08
+## 473     3 Ptilcili      0.03
+## 474     4 Ptilcili      0.00
+## 475     2 Ptilcili      0.03
+## 476     9 Ptilcili      0.25
+## 477    12 Ptilcili      0.00
+## 478    10 Ptilcili      0.00
+## 479    11 Ptilcili      0.67
+## 480    21 Ptilcili     10.00
+## 481    18 Barbhatc      0.00
+## 482    15 Barbhatc      0.00
+## 483    24 Barbhatc      0.00
+## 484    27 Barbhatc      0.08
+## 485    23 Barbhatc      0.02
+## 486    19 Barbhatc      0.02
+## 487    22 Barbhatc      0.00
+## 488    16 Barbhatc      0.00
+## 489    28 Barbhatc      0.00
+## 490    13 Barbhatc      0.07
+## 491    14 Barbhatc      0.00
+## 492    20 Barbhatc      0.00
+## 493    25 Barbhatc      0.00
+## 494     7 Barbhatc      0.00
+## 495     5 Barbhatc      0.00
+## 496     6 Barbhatc      0.00
+## 497     3 Barbhatc      0.00
+## 498     4 Barbhatc      0.00
+## 499     2 Barbhatc      0.00
+## 500     9 Barbhatc      0.00
+## 501    12 Barbhatc      0.00
+## 502    10 Barbhatc      0.00
+## 503    11 Barbhatc      0.00
+## 504    21 Barbhatc      3.00
+## 505    18 Cladarbu     21.73
+## 506    15 Cladarbu     12.05
+## 507    24 Cladarbu      3.58
+## 508    27 Cladarbu      1.42
+## 509    23 Cladarbu      9.08
+## 510    19 Cladarbu      7.23
+## 511    22 Cladarbu      6.10
+## 512    16 Cladarbu      7.13
+## 513    28 Cladarbu      0.17
+## 514    13 Cladarbu     23.07
+## 515    14 Cladarbu     17.45
+## 516    20 Cladarbu      6.80
+## 517    25 Cladarbu      6.00
+## 518     7 Cladarbu     35.00
+## 519     5 Cladarbu     18.50
+## 520     6 Cladarbu     39.00
+## 521     3 Cladarbu      8.80
+## 522     4 Cladarbu     15.73
+## 523     2 Cladarbu      0.48
+## 524     9 Cladarbu      0.46
+## 525    12 Cladarbu      3.60
+## 526    10 Cladarbu      1.30
+## 527    11 Cladarbu      9.67
+## 528    21 Cladarbu      0.70
+## 529    18 Cladrang     21.47
+## 530    15 Cladrang      8.13
+## 531    24 Cladrang      5.52
+## 532    27 Cladrang      7.63
+## 533    23 Cladrang      9.22
+## 534    19 Cladrang      4.95
+## 535    22 Cladrang      3.60
+## 536    16 Cladrang     14.03
+## 537    28 Cladrang      0.87
+## 538    13 Cladrang     23.67
+## 539    14 Cladrang      1.32
+## 540    20 Cladrang     11.22
+## 541    25 Cladrang      2.25
+## 542     7 Cladrang     42.50
+## 543     5 Cladrang     59.00
+## 544     6 Cladrang     37.50
+## 545     3 Cladrang     29.50
+## 546     4 Cladrang     20.03
+## 547     2 Cladrang     24.50
+## 548     9 Cladrang      4.00
+## 549    12 Cladrang     14.60
+## 550    10 Cladrang      8.70
+## 551    11 Cladrang     29.80
+## 552    21 Cladrang      4.70
+## 553    18 Cladstel      3.50
+## 554    15 Cladstel      0.18
+## 555    24 Cladstel      0.07
+## 556    27 Cladstel      2.55
+## 557    23 Cladstel      0.05
+## 558    19 Cladstel     22.08
+## 559    22 Cladstel      0.23
+## 560    16 Cladstel      0.02
+## 561    28 Cladstel      0.00
+## 562    13 Cladstel     11.90
+## 563    14 Cladstel      0.12
+## 564    20 Cladstel      0.05
+## 565    25 Cladstel      0.00
+## 566     7 Cladstel      0.28
+## 567     5 Cladstel      0.98
+## 568     6 Cladstel     11.30
+## 569     3 Cladstel     55.60
+## 570     4 Cladstel     28.20
+## 571     2 Cladstel     75.00
+## 572     9 Cladstel     84.30
+## 573    12 Cladstel     63.30
+## 574    10 Cladstel     84.30
+## 575    11 Cladstel     31.80
+## 576    21 Cladstel     10.90
+## 577    18 Cladunci      0.30
+## 578    15 Cladunci      2.65
+## 579    24 Cladunci      8.93
+## 580    27 Cladunci      0.15
+## 581    23 Cladunci      0.73
+## 582    19 Cladunci      0.25
+## 583    22 Cladunci      2.38
+## 584    16 Cladunci      0.82
+## 585    28 Cladunci      0.05
+## 586    13 Cladunci      0.95
+## 587    14 Cladunci     23.68
+## 588    20 Cladunci      4.75
+## 589    25 Cladunci      0.80
+## 590     7 Cladunci      0.35
+## 591     5 Cladunci      0.28
+## 592     6 Cladunci      3.45
+## 593     3 Cladunci      0.25
+## 594     4 Cladunci      0.73
+## 595     2 Cladunci      0.20
+## 596     9 Cladunci      0.25
+## 597    12 Cladunci      1.30
+## 598    10 Cladunci      0.25
+## 599    11 Cladunci      2.53
+## 600    21 Cladunci      0.25
+## 601    18 Cladcocc      0.18
+## 602    15 Cladcocc      0.13
+## 603    24 Cladcocc      0.00
+## 604    27 Cladcocc      0.00
+## 605    23 Cladcocc      0.08
+## 606    19 Cladcocc      0.10
+## 607    22 Cladcocc      0.17
+## 608    16 Cladcocc      0.15
+## 609    28 Cladcocc      0.02
+## 610    13 Cladcocc      0.17
+## 611    14 Cladcocc      0.22
+## 612    20 Cladcocc      0.03
+## 613    25 Cladcocc      0.12
+## 614     7 Cladcocc      0.08
+## 615     5 Cladcocc      0.23
+## 616     6 Cladcocc      0.18
+## 617     3 Cladcocc      0.08
+## 618     4 Cladcocc      0.10
+## 619     2 Cladcocc      0.00
+## 620     9 Cladcocc      0.25
+## 621    12 Cladcocc      0.00
+## 622    10 Cladcocc      0.25
+## 623    11 Cladcocc      0.25
+## 624    21 Cladcocc      0.00
+## 625    18 Cladcorn      0.23
+## 626    15 Cladcorn      0.18
+## 627    24 Cladcorn      0.20
+## 628    27 Cladcorn      0.38
+## 629    23 Cladcorn      1.42
+## 630    19 Cladcorn      0.25
+## 631    22 Cladcorn      0.13
+## 632    16 Cladcorn      0.05
+## 633    28 Cladcorn      0.03
+## 634    13 Cladcorn      0.05
+## 635    14 Cladcorn      0.50
+## 636    20 Cladcorn      0.12
+## 637    25 Cladcorn      0.57
+## 638     7 Cladcorn      0.20
+## 639     5 Cladcorn      0.23
+## 640     6 Cladcorn      0.20
+## 641     3 Cladcorn      0.25
+## 642     4 Cladcorn      0.15
+## 643     2 Cladcorn      0.03
+## 644     9 Cladcorn      0.25
+## 645    12 Cladcorn      0.25
+## 646    10 Cladcorn      0.25
+## 647    11 Cladcorn      0.25
+## 648    21 Cladcorn      0.05
+## 649    18 Cladgrac      0.25
+## 650    15 Cladgrac      0.23
+## 651    24 Cladgrac      0.48
+## 652    27 Cladgrac      0.12
+## 653    23 Cladgrac      0.50
+## 654    19 Cladgrac      0.18
+## 655    22 Cladgrac      0.18
+## 656    16 Cladgrac      0.22
+## 657    28 Cladgrac      0.07
+## 658    13 Cladgrac      0.23
+## 659    14 Cladgrac      0.15
+## 660    20 Cladgrac      0.22
+## 661    25 Cladgrac      0.17
+## 662     7 Cladgrac      0.25
+## 663     5 Cladgrac      0.23
+## 664     6 Cladgrac      0.25
+## 665     3 Cladgrac      0.25
+## 666     4 Cladgrac      0.13
+## 667     2 Cladgrac      0.03
+## 668     9 Cladgrac      0.25
+## 669    12 Cladgrac      0.25
+## 670    10 Cladgrac      0.00
+## 671    11 Cladgrac      0.25
+## 672    21 Cladgrac      0.25
+## 673    18 Cladfimb      0.25
+## 674    15 Cladfimb      0.25
+## 675    24 Cladfimb      0.00
+## 676    27 Cladfimb      0.10
+## 677    23 Cladfimb      0.17
+## 678    19 Cladfimb      0.10
+## 679    22 Cladfimb      0.20
+## 680    16 Cladfimb      0.22
+## 681    28 Cladfimb      0.10
+## 682    13 Cladfimb      0.18
+## 683    14 Cladfimb      0.23
+## 684    20 Cladfimb      0.18
+## 685    25 Cladfimb      0.15
+## 686     7 Cladfimb      0.18
+## 687     5 Cladfimb      0.10
+## 688     6 Cladfimb      0.25
+## 689     3 Cladfimb      0.15
+## 690     4 Cladfimb      0.10
+## 691     2 Cladfimb      0.05
+## 692     9 Cladfimb      0.25
+## 693    12 Cladfimb      0.25
+## 694    10 Cladfimb      0.25
+## 695    11 Cladfimb      0.00
+## 696    21 Cladfimb      0.25
+## 697    18 Cladcris      0.23
+## 698    15 Cladcris      1.23
+## 699    24 Cladcris      0.07
+## 700    27 Cladcris      0.03
+## 701    23 Cladcris      1.78
+## 702    19 Cladcris      0.12
+## 703    22 Cladcris      0.20
+## 704    16 Cladcris      0.17
+## 705    28 Cladcris      0.02
+## 706    13 Cladcris      0.57
+## 707    14 Cladcris      0.97
+## 708    20 Cladcris      0.07
+## 709    25 Cladcris      0.07
+## 710     7 Cladcris      0.13
+## 711     5 Cladcris      0.05
+## 712     6 Cladcris      0.23
+## 713     3 Cladcris      0.10
+## 714     4 Cladcris      0.15
+## 715     2 Cladcris      0.03
+## 716     9 Cladcris      0.25
+## 717    12 Cladcris      0.25
+## 718    10 Cladcris      0.25
+## 719    11 Cladcris      0.25
+## 720    21 Cladcris      0.25
+## 721    18 Cladchlo      0.00
+## 722    15 Cladchlo      0.00
+## 723    24 Cladchlo      0.10
+## 724    27 Cladchlo      0.00
+## 725    23 Cladchlo      0.05
+## 726    19 Cladchlo      0.05
+## 727    22 Cladchlo      0.02
+## 728    16 Cladchlo      0.00
+## 729    28 Cladchlo      0.00
+## 730    13 Cladchlo      0.02
+## 731    14 Cladchlo      0.00
+## 732    20 Cladchlo      0.00
+## 733    25 Cladchlo      0.00
+## 734     7 Cladchlo      0.08
+## 735     5 Cladchlo      0.00
+## 736     6 Cladchlo      0.03
+## 737     3 Cladchlo      0.03
+## 738     4 Cladchlo      0.00
+## 739     2 Cladchlo      0.03
+## 740     9 Cladchlo      0.25
+## 741    12 Cladchlo      0.00
+## 742    10 Cladchlo      0.25
+## 743    11 Cladchlo      0.00
+## 744    21 Cladchlo      0.25
+## 745    18 Cladbotr      0.00
+## 746    15 Cladbotr      0.00
+## 747    24 Cladbotr      0.02
+## 748    27 Cladbotr      0.02
+## 749    23 Cladbotr      0.05
+## 750    19 Cladbotr      0.02
+## 751    22 Cladbotr      0.00
+## 752    16 Cladbotr      0.00
+## 753    28 Cladbotr      0.02
+## 754    13 Cladbotr      0.07
+## 755    14 Cladbotr      0.00
+## 756    20 Cladbotr      0.02
+## 757    25 Cladbotr      0.00
+## 758     7 Cladbotr      0.00
+## 759     5 Cladbotr      0.00
+## 760     6 Cladbotr      0.00
+## 761     3 Cladbotr      0.00
+## 762     4 Cladbotr      0.00
+## 763     2 Cladbotr      0.00
+## 764     9 Cladbotr      0.00
+## 765    12 Cladbotr      0.00
+## 766    10 Cladbotr      0.00
+## 767    11 Cladbotr      0.00
+## 768    21 Cladbotr      0.25
+## 769    18 Cladamau      0.08
+## 770    15 Cladamau      0.00
+## 771    24 Cladamau      0.00
+## 772    27 Cladamau      0.00
+## 773    23 Cladamau      0.00
+## 774    19 Cladamau      0.00
+## 775    22 Cladamau      0.00
+## 776    16 Cladamau      0.00
+## 777    28 Cladamau      0.00
+## 778    13 Cladamau      0.00
+## 779    14 Cladamau      0.00
+## 780    20 Cladamau      0.00
+## 781    25 Cladamau      0.00
+## 782     7 Cladamau      0.00
+## 783     5 Cladamau      0.03
+## 784     6 Cladamau      0.00
+## 785     3 Cladamau      0.03
+## 786     4 Cladamau      0.00
+## 787     2 Cladamau      0.00
+## 788     9 Cladamau      0.00
+## 789    12 Cladamau      0.00
+## 790    10 Cladamau      0.00
+## 791    11 Cladamau      0.00
+## 792    21 Cladamau      0.00
+## 793    18   Cladsp      0.02
+## 794    15   Cladsp      0.00
+## 795    24   Cladsp      0.00
+## 796    27   Cladsp      0.02
+## 797    23   Cladsp      0.00
+## 798    19   Cladsp      0.00
+## 799    22   Cladsp      0.02
+## 800    16   Cladsp      0.02
+## 801    28   Cladsp      0.00
+## 802    13   Cladsp      0.07
+## 803    14   Cladsp      0.00
+## 804    20   Cladsp      0.02
+## 805    25   Cladsp      0.02
+## 806     7   Cladsp      0.00
+## 807     5   Cladsp      0.00
+## 808     6   Cladsp      0.03
+## 809     3   Cladsp      0.00
+## 810     4   Cladsp      0.05
+## 811     2   Cladsp      0.00
+## 812     9   Cladsp      0.25
+## 813    12   Cladsp      0.00
+## 814    10   Cladsp      0.00
+## 815    11   Cladsp      0.00
+## 816    21   Cladsp      0.00
+## 817    18 Cetreric      0.02
+## 818    15 Cetreric      0.15
+## 819    24 Cetreric      0.78
+## 820    27 Cetreric      0.00
+## 821    23 Cetreric      0.00
+## 822    19 Cetreric      0.00
+## 823    22 Cetreric      0.02
+## 824    16 Cetreric      0.18
+## 825    28 Cetreric      0.00
+## 826    13 Cetreric      0.18
+## 827    14 Cetreric      0.68
+## 828    20 Cetreric      0.15
+## 829    25 Cetreric      0.03
+## 830     7 Cetreric      0.05
+## 831     5 Cetreric      0.18
+## 832     6 Cetreric      0.35
+## 833     3 Cetreric      0.05
+## 834     4 Cetreric      0.28
+## 835     2 Cetreric      0.00
+## 836     9 Cetreric      0.25
+## 837    12 Cetreric      0.00
+## 838    10 Cetreric      0.25
+## 839    11 Cetreric      0.00
+## 840    21 Cetreric      0.00
+## 841    18 Cetrisla      0.00
+## 842    15 Cetrisla      0.03
+## 843    24 Cetrisla      0.12
+## 844    27 Cetrisla      0.00
+## 845    23 Cetrisla      0.00
+## 846    19 Cetrisla      0.00
+## 847    22 Cetrisla      0.00
+## 848    16 Cetrisla      0.08
+## 849    28 Cetrisla      0.02
+## 850    13 Cetrisla      0.02
+## 851    14 Cetrisla      0.02
+## 852    20 Cetrisla      0.00
+## 853    25 Cetrisla      0.02
+## 854     7 Cetrisla      0.00
+## 855     5 Cetrisla      0.00
+## 856     6 Cetrisla      0.00
+## 857     3 Cetrisla      0.00
+## 858     4 Cetrisla      0.05
+## 859     2 Cetrisla      0.00
+## 860     9 Cetrisla      0.25
+## 861    12 Cetrisla      0.25
+## 862    10 Cetrisla      0.25
+## 863    11 Cetrisla      0.25
+## 864    21 Cetrisla      0.67
+## 865    18 Flavniva      0.12
+## 866    15 Flavniva      0.00
+## 867    24 Flavniva      0.00
+## 868    27 Flavniva      0.00
+## 869    23 Flavniva      0.02
+## 870    19 Flavniva      0.02
+## 871    22 Flavniva      0.00
+## 872    16 Flavniva      0.00
+## 873    28 Flavniva      0.00
+## 874    13 Flavniva      0.00
+## 875    14 Flavniva      0.00
+## 876    20 Flavniva      0.00
+## 877    25 Flavniva      0.00
+## 878     7 Flavniva      0.23
+## 879     5 Flavniva      0.28
+## 880     6 Flavniva      0.08
+## 881     3 Flavniva      0.15
+## 882     4 Flavniva     10.03
+## 883     2 Flavniva      0.00
+## 884     9 Flavniva      0.67
+## 885    12 Flavniva      0.00
+## 886    10 Flavniva      0.25
+## 887    11 Flavniva      0.00
+## 888    21 Flavniva      0.00
+## 889    18 Nepharct      0.02
+## 890    15 Nepharct      0.00
+## 891    24 Nepharct      0.00
+## 892    27 Nepharct      0.00
+## 893    23 Nepharct      0.00
+## 894    19 Nepharct      0.00
+## 895    22 Nepharct      0.00
+## 896    16 Nepharct      0.00
+## 897    28 Nepharct      0.00
+## 898    13 Nepharct      0.00
+## 899    14 Nepharct      0.00
+## 900    20 Nepharct      0.02
+## 901    25 Nepharct      4.87
+## 902     7 Nepharct      0.20
+## 903     5 Nepharct      0.00
+## 904     6 Nepharct      0.00
+## 905     3 Nepharct      0.15
+## 906     4 Nepharct      0.00
+## 907     2 Nepharct      0.00
+## 908     9 Nepharct      0.00
+## 909    12 Nepharct      0.00
+## 910    10 Nepharct      0.00
+## 911    11 Nepharct      0.00
+## 912    21 Nepharct      0.00
+## 913    18   Stersp      0.62
+## 914    15   Stersp      0.85
+## 915    24   Stersp      0.03
+## 916    27   Stersp      0.00
+## 917    23   Stersp      1.58
+## 918    19   Stersp      0.28
+## 919    22   Stersp      0.00
+## 920    16   Stersp      0.03
+## 921    28   Stersp      0.02
+## 922    13   Stersp      0.03
+## 923    14   Stersp      0.33
+## 924    20   Stersp      0.00
+## 925    25   Stersp      0.10
+## 926     7   Stersp      0.93
+## 927     5   Stersp     10.28
+## 928     6   Stersp      0.03
+## 929     3   Stersp      0.28
+## 930     4   Stersp      0.95
+## 931     2   Stersp      0.00
+## 932     9   Stersp      0.00
+## 933    12   Stersp      0.00
+## 934    10   Stersp      0.25
+## 935    11   Stersp      0.93
+## 936    21   Stersp      0.00
+## 937    18 Peltapht      0.02
+## 938    15 Peltapht      0.00
+## 939    24 Peltapht      0.00
+## 940    27 Peltapht      0.07
+## 941    23 Peltapht      0.33
+## 942    19 Peltapht      0.00
+## 943    22 Peltapht      0.00
+## 944    16 Peltapht      0.00
+## 945    28 Peltapht      0.00
+## 946    13 Peltapht      0.02
+## 947    14 Peltapht      0.00
+## 948    20 Peltapht      0.00
+## 949    25 Peltapht      0.07
+## 950     7 Peltapht      0.00
+## 951     5 Peltapht      0.00
+## 952     6 Peltapht      0.00
+## 953     3 Peltapht      0.00
+## 954     4 Peltapht      0.00
+## 955     2 Peltapht      0.00
+## 956     9 Peltapht      0.00
+## 957    12 Peltapht      0.00
+## 958    10 Peltapht      0.00
+## 959    11 Peltapht      0.25
+## 960    21 Peltapht      0.00
+## 961    18 Icmaeric      0.00
+## 962    15 Icmaeric      0.00
+## 963    24 Icmaeric      0.00
+## 964    27 Icmaeric      0.00
+## 965    23 Icmaeric      0.00
+## 966    19 Icmaeric      0.00
+## 967    22 Icmaeric      0.00
+## 968    16 Icmaeric      0.07
+## 969    28 Icmaeric      0.00
+## 970    13 Icmaeric      0.00
+## 971    14 Icmaeric      0.02
+## 972    20 Icmaeric      0.00
+## 973    25 Icmaeric      0.00
+## 974     7 Icmaeric      0.03
+## 975     5 Icmaeric      0.10
+## 976     6 Icmaeric      0.00
+## 977     3 Icmaeric      0.00
+## 978     4 Icmaeric      0.00
+## 979     2 Icmaeric      0.00
+## 980     9 Icmaeric      0.00
+## 981    12 Icmaeric      0.00
+## 982    10 Icmaeric      0.00
+## 983    11 Icmaeric      0.00
+## 984    21 Icmaeric      0.00
+## 985    18 Cladcerv      0.00
+## 986    15 Cladcerv      0.00
+## 987    24 Cladcerv      0.00
+## 988    27 Cladcerv      0.00
+## 989    23 Cladcerv      0.00
+## 990    19 Cladcerv      0.00
+## 991    22 Cladcerv      0.00
+## 992    16 Cladcerv      0.00
+## 993    28 Cladcerv      0.00
+## 994    13 Cladcerv      0.00
+## 995    14 Cladcerv      0.00
+## 996    20 Cladcerv      0.00
+## 997    25 Cladcerv      0.02
+## 998     7 Cladcerv      0.00
+## 999     5 Cladcerv      0.00
+## 1000    6 Cladcerv      0.00
+## 1001    3 Cladcerv      0.00
+## 1002    4 Cladcerv      0.05
+## 1003    2 Cladcerv      0.03
+## 1004    9 Cladcerv      0.00
+## 1005   12 Cladcerv      0.00
+## 1006   10 Cladcerv      0.00
+## 1007   11 Cladcerv      0.00
+## 1008   21 Cladcerv      0.00
+## 1009   18 Claddefo      0.25
+## 1010   15 Claddefo      1.00
+## 1011   24 Claddefo      0.33
+## 1012   27 Claddefo      0.15
+## 1013   23 Claddefo      1.97
+## 1014   19 Claddefo      0.37
+## 1015   22 Claddefo      0.15
+## 1016   16 Claddefo      0.67
+## 1017   28 Claddefo      0.08
+## 1018   13 Claddefo      0.47
+## 1019   14 Claddefo      1.57
+## 1020   20 Claddefo      1.20
+## 1021   25 Claddefo      0.05
+## 1022    7 Claddefo      0.10
+## 1023    5 Claddefo      0.25
+## 1024    6 Claddefo      0.28
+## 1025    3 Claddefo      0.08
+## 1026    4 Claddefo      0.08
+## 1027    2 Claddefo      0.03
+## 1028    9 Claddefo      0.25
+## 1029   12 Claddefo      0.25
+## 1030   10 Claddefo      0.25
+## 1031   11 Claddefo      0.00
+## 1032   21 Claddefo      0.40
+## 1033   18 Cladphyl      0.00
+## 1034   15 Cladphyl      0.00
+## 1035   24 Cladphyl      0.00
+## 1036   27 Cladphyl      0.00
+## 1037   23 Cladphyl      0.00
+## 1038   19 Cladphyl      0.00
+## 1039   22 Cladphyl      0.00
+## 1040   16 Cladphyl      0.00
+## 1041   28 Cladphyl      0.00
+## 1042   13 Cladphyl      0.00
+## 1043   14 Cladphyl      0.05
+## 1044   20 Cladphyl      0.00
+## 1045   25 Cladphyl      0.00
+## 1046    7 Cladphyl      0.00
+## 1047    5 Cladphyl      0.00
+## 1048    6 Cladphyl      0.00
+## 1049    3 Cladphyl      0.00
+## 1050    4 Cladphyl      0.00
+## 1051    2 Cladphyl      0.00
+## 1052    9 Cladphyl      0.25
+## 1053   12 Cladphyl      0.00
+## 1054   10 Cladphyl      0.25
+## 1055   11 Cladphyl      0.25
+## 1056   21 Cladphyl      0.00</pre>
+
+</article></slide><slide class=""><hgroup><h2><code class="smaller">spread</code></h2></hgroup><article  id="spread">
+
+<pre class = 'prettyprint lang-r'>formato_largo &lt;- spread(data = formato_longo, key = especie, value = densidade, fill = 0)
+formato_largo</pre>
+
+<pre >## # A tibble: 24 x 45
+##    site  Barbhatc Betupube Callvulg Cetreric Cetrisla Cladamau Cladarbu
+##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 10        0           0     0.25     0.25     0.25     0        1.3 
+##  2 11        0           0     2.37     0        0.25     0        9.67
+##  3 12        0           0     0.25     0        0.25     0        3.6 
+##  4 13        0.07        0    24.1      0.18     0.02     0       23.1 
+##  5 14        0           0     3.75     0.68     0.02     0       17.4 
+##  6 15        0           0     0.67     0.15     0.03     0       12.0 
+##  7 16        0           0     4.47     0.18     0.08     0        7.13
+##  8 18        0           0     0.55     0.02     0        0.08    21.7 
+##  9 19        0.02        0     0        0        0        0        7.23
+## 10 2         0           0     0.05     0        0        0        0.48
+## # ... with 14 more rows, and 37 more variables: Cladbotr &lt;dbl&gt;,
+## #   Cladcerv &lt;dbl&gt;, Cladchlo &lt;dbl&gt;, Cladcocc &lt;dbl&gt;, Cladcorn &lt;dbl&gt;,
+## #   Cladcris &lt;dbl&gt;, Claddefo &lt;dbl&gt;, Cladfimb &lt;dbl&gt;, Cladgrac &lt;dbl&gt;,
+## #   Cladphyl &lt;dbl&gt;, Cladrang &lt;dbl&gt;, Cladsp &lt;dbl&gt;, Cladstel &lt;dbl&gt;,
+## #   Cladunci &lt;dbl&gt;, Descflex &lt;dbl&gt;, Dicrfusc &lt;dbl&gt;, Dicrpoly &lt;dbl&gt;,
+## #   Dicrsp &lt;dbl&gt;, Diphcomp &lt;dbl&gt;, Empenigr &lt;dbl&gt;, Flavniva &lt;dbl&gt;,
+## #   Hylosple &lt;dbl&gt;, Icmaeric &lt;dbl&gt;, Nepharct &lt;dbl&gt;, Peltapht &lt;dbl&gt;,
+## #   Pinusylv &lt;dbl&gt;, Pleuschr &lt;dbl&gt;, Pohlnuta &lt;dbl&gt;, Polycomm &lt;dbl&gt;,
+## #   Polyjuni &lt;dbl&gt;, Polypili &lt;dbl&gt;, Ptilcili &lt;dbl&gt;, Rhodtome &lt;dbl&gt;,
+## #   Stersp &lt;dbl&gt;, Vaccmyrt &lt;dbl&gt;, Vacculig &lt;dbl&gt;, Vaccviti &lt;dbl&gt;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Exercício 15</h2></hgroup><article  id="exercicio-15">
+
+<ul>
+<li>A partir do objeto <strong>formato_longo</strong>, calcule a riqueza de espécies e a abundância total de espécies em cada site.</li>
 </ul></article></slide>
 
 
