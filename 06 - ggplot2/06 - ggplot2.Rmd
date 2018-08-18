@@ -2,8 +2,10 @@
 title: "ggplot2"
 subtitle: "Nicholas A. C. Marino"
 author: "nac.marino@gmail.com"
-date: "github.com/nacmarino/introducaoR"
-output: html_document
+date: "github.com/nacmarino/compartilhaR"
+output: 
+  ioslides_presentation:
+    wide: true
 ---
 
 <style type="text/css">
@@ -18,546 +20,827 @@ h1,h2,h3,h4,h5,h6{
 }
 </style>
 
-# ggplot2
+## Estrutura da Aula
 
-Este é um dos pacotes gráficos mais utilizados na linguagem R (diz-se que mais até que o `base` e `lattice`). Ele foi escrito por Hadley Wickham (cientista chefe do RStudio), quando ainda era um estudante de pós-graduação, e representa a implementação do _The Grammar of Graphics_, idéia desenvolvida por Leland Wilkinson.  
+1. [Gramática dos Gráficos](#anchor1)
+2. [`ggplot2`](#anchor2)
+3. [Exportando figuras do `ggplot2`](#anchor3)
+4. [Integrando o `ggplot2` ao `tidyverse`](#anchor4)
 
-> “Resumidamente, a gramática nos diz que um gráfico deve ser mapeado (__mapping__) a partir dos dados (__data__), de acordo com a aparência (__aesthetic__) (color, formato, tamanho) de objetos geométricos (__geometric__) (pontos, linhas, barras). A figura também pode conter transformações estatísticas dos dados, sendo desenhada a partir de um sistema específico de coordenadas.”  (Do livro "_ggplot2_")
-
-Para compreender o porquê da ideia ser chamada de Gramática dos Gráficos, basta fazer um paralelo com a nossa gramática (licença poética permitida). Para criar um gráfico existe:  
-* um sujeito, que são as variáveis que queremos colocar no gráfico (_data_, _aesthetics_);  
-* um ou mais verbos, que representa de que forma o sujeito será apresentado (_geometries_, _facets_);  
-* um ou mais adjetivo, que descreve características do sujeito (_color_, _fill_, _shape_, _alpha_).  
-
+## Como você descreveria a figura abaixo? {#anchor1}
 
 <center>
-<img src="figuras/ggplot2.png" height="400px"></img>
+<img src="figures/exemplos1.png" height="400px"></img>
 </center>
 
-Ou seja, a principal ideia por traz da Gramática dos Gráficos e da implementação deste pacote é reduzir a distância entre a mente e a página, a ideia e a criação: você desenha, adicionando e modificando as camadas durante o processo. Isto traz algumas vantagens:  
-* Não é preciso realizar todo o desenho em um único objeto (ao contrário do `lattice`);  
-* Uma vez que você tenha adicionado uma entidade ao gráfico, você pode alterar ela posteriormente (ao contrário do `base`);  
-* Gráficos complexos, com comandos simples e intuitivos (ao contrário do `lattice` e `base`).  
-
-Você pode carregar a Gramática dos Gráficos pelo pacote `ggplot2`, ou carregar as suas funções através do pacote `tidyverse`.
+## Que figura pode ser feita com estes dados?
 
 ```{r echo=FALSE}
-suppressPackageStartupMessages(suppressMessages(library(tidyverse)))
+data.frame(var1 = rep(c("a", "b"), 3), var2 = rep(c("fechado", "aberto"), each = 3), x = c(2, 3, 2.5, 5, 6, 5.5), y = c(1, 1.5, 1.4, 4.2, 4, 4.6))
 ```
 
-```{r eval=FALSE}
+## Gramática dos Gráficos
+
+* Leland Wilkinson desenvolveu a ideia de que todo gráfico pode ser descrito por um conjunto de componentes semanticos:
+    + um sujeito, que são as variáveis que queremos colocar no gráfico (_data_, _aesthetics_);  
+    + um ou mais verbos, que representam de que forma o sujeito será apresentado (_geometries_, _facets_);  
+    + um ou mais adjetivos, que descrevem características do sujeito (_color_, _fill_, _shape_, _alpha_).  
+* Ele organizou isto na forma da Gramática dos Gráficos (_The Grammar of Graphics_) - um esquema para facilitar e descrever a visualização dos dados.  
+
+## Gramática dos Gráficos
+
+### “Resumidamente, a gramática nos diz que um gráfico deve ser mapeado (__mapping__) a partir dos dados (__data__), de acordo com a aparência (__aesthetic__; color, formato, tamanho) de objetos geométricos (__geometric__; pontos, linhas, barras). A figura também pode conter transformações estatísticas dos dados, sendo desenhada a partir de um sistema específico de coordenadas.”  (Do livro "_ggplot2_")
+
+## Gramática dos Gráficos
+
+* Uma figura é desenhada através da sobreposição de diferentes camadas de informações sobre os dados.
+
+<center>
+<img src="figures/ggplot2.png" height="400px"></img>
+</center>
+
+## Gramática dos Gráficos
+
+* A ideia principal por traz da Gramática dos Gráficos eé reduzir a distância entre a mente e a página, a ideia e a criação: você desenha, adicionando e modifica as camadas durante o processo de criação da figura. 
+* Isto traz algumas vantagens:  
+    + Não é preciso desenhar toda a figura de uma vez só (ao contrário das funcionalidades do pacote `lattice`);  
+    + Toda camada adicionada à figura pode ser alterada posteriormente (ao contrário das funcionalidades do pacote `base`);  
+    + Criação de figuras complexas com comandos simples e intuitivos (ao contrário dos pacotes `lattice` e `base`).  
+
+## `ggplot2` {#anchor2}
+
+* É a implementação da Gramática dos Gráficos na linguagem de programação R.
+* É um dos pacotes gráficos mais utilizados, por facilitar muito mais a visualização dos dados quando em comparação com os pacotes `base` e `lattice`. 
+* Escrito por Hadley Wickham (cientista chefe do RStudio), quando ainda era um estudante de pós-graduação.
+* Podemos carregar este pacote usando o próprio nome `ggplot2` ou através do `tidyverse`.
+
+```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 ```
 
----
+```{r eval=FALSE}
+# outra opção - usar uma ou outra!
+library(ggplot2)
+```
 
-Para esta primeira parte da aula, vamos usar um dos dados que utilizamos na aula sobre manipulação de dados: `gapminder`.
+## Exercício 1
 
-```{r}
-# carregando pacote
+a. Importe para o R a tabela de dados das `ilhas.xlsx`, e atribua esta tabela ao objeto __ilhas__.
+b. Carregue o conjunto de dados __gapminder__ disponível no pacote `gapminder`.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(gapminder)
-# conjunto de dados
-gapminder
+library(readxl)
+ilhas <- read_excel(path = "../99 - dados para exemplos/ilhas.xlsx", na = "NA")
 ```
 
----
+## Começando uma figura
 
-A função mais básica dentro do `ggplot2` é a função `qplot` ("_quick plot_"). Ela oferece a forma mais simples e rápida de empregar a gramática dos gráficos, sem atentar muito à qualidade visual final do mesmo.
+* Toda figura criada através do `ggplot2` começa da mesma forma: através da função `ggplot()`.
+* Ainda assim, existem duas formas de iniciar uma figura através dessa função, sendo a primeira delas dizendo o que iremos desenhar: __mapearemos__ uma unidade __estética__ que virá de um conjunto de dados.
 
-```{r}
-# "..." são os aesthetics (size, shape, color, fill)
-args(qplot)
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = area, y = riqueza))
 ```
 
-Para começar, vamos plotar uma relação entre o tamanho da população e o GDP com o conjunto de dados do `gapminder`.
+## Começando uma figura
 
-```{r}
-qplot(x =  pop, y = gdpPercap, data = gapminder)
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot(data = ilhas, mapping = aes(x = area, y = riqueza))
 ```
 
-Podemos adicionar elementos gráficos à figura que criamos, baseado em alguma informação sobre os dados. Vamos fazer com que cada ponto tenha uma cor diferente de acordo com a expectativa de vida e um formato de símbolo diferente de acordo com o continente.  
+## Definindo como `x` e `y` são representados
 
-```{r}
-qplot(x =  pop, y = gdpPercap, shape = continent, colour = lifeExp, data = gapminder)
-```
+* Uma vez que já definimos que unidade __estética__ será __mapeada__, precisamos definir de que forma esta relação será representada.
+* A representação destas relações é feita através de representações __geométricas__, que indicam o tipo de figura que gostaríamos de produzir.
+* Como queremos adicionar uma representação __geométrica__ à unidade __estética__ que foi __mapeada__ precisamos, literalmente, adicionar uma camada à outra, utilizando o sinal `+` ao final da linha.
 
-Como o gráfico está ruim de ver, por conta do _range_ de variabilidade existente, podemos logaritimizar os dois eixos.
-
-```{r}
-qplot(x =  pop, y = gdpPercap, shape = continent, colour = lifeExp, data = gapminder, log = "xy")
-```
-
-Agora embaralhou tudo! Uma forma de resolver isso é plotar uma figura diferente para cada continente, por exemplo. Podemos fazer isso colocando cada continente em um painel distinto:
-
-```{r}
-qplot(x =  pop, y = gdpPercap, shape = continent, colour = lifeExp, data = gapminder, log = "xy", facets = ~ continent)
-```
-
-Como podemos ver, os dados parecem mostrar algum tipo de tendência, que poderia ser melhor retratada por uma regressão.
-
-```{r}
-qplot(x =  pop, y = gdpPercap, shape = continent, colour = lifeExp, data = gapminder, log = "xy", facets = ~ continent, geom = "smooth")
-```
-
-Note então que podemos criar tipos diferentes de gráficos modificando o argumento `geom`. Poderíamos, por exemplo, criar um gráfico de boxplot para mostrar as diferenças no GDP entre continentes:
-
-```{r}
-qplot(x = continent, y = gdpPercap, data = gapminder, geom = "boxplot")
-```
-
-E podemos adicionar outras customizações a esse gráfico:
-
-```{r}
-qplot(x = continent, y = gdpPercap, data = gapminder, geom = "boxplot", fill = continent, 
-      xlab = "Continente", ylab = "Produto Interno Bruto per capita", 
-      main = "Variação do produto interno produto per capita por continente")
-```
-
-Apesar da similaridade inicial com algumas características função `plot`, você pode ver que o uso do `ggplot2` é bem mais intuitivo do que aquele do `plot`. Entretanto, a função `qplot` oferece uma baixa capacidade de customização do gráfico (por exemplo, não temos como remover este fundo cinza horroroso). Apesar disso, esta é a intenção principal desta função, pois ela foi feita para produzir gráficos rápidos e informativos para a exploração de dados.
-
-Veremos a seguir como usar todo o potencial e funcionalidade do `ggplot2`.
-
----
-
-##### Exercício 1
-
-a. Como varia a expectativa de vida entre os continentes?
-b. Qual a relação entre o GDP e a expectativa da vida para os países da América?
-c. Qual a relação entre o GDP e o tamanho da população ao longo dos anos para o Brasil?
-
----
-
-A função chave do `ggplot2` é a função `ggplot`, que cria um objeto da classe `ggplot` e a primeira 'camada' do desenho do gráfico. É através dessa função que podemos obter a customização total de um gráfico, a ponto de utilizarmos ele em uma publicação.  
-
-```{r}
-# um grafico do ggplot em branco
-ggplot()
-```
-
-Uma  formas de iniciar um gráfico com o `ggplot` é dizendo para ele o que iremos desenhar: __mapearemos__ uma unidade estética da variável __x__ contra a variável __y__ que virão de um conjunto de dados.
-
-```{r}
-# adicionando pontos da evolução do GDP ao longo dos anos
-ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap))
-```
-
-Uma vez que o `ggplot` já sabe o que desenhar, podemos adicionar objetos geométricos ao gráfico (`geom`), que indicaram o tipo de figura que gostaríamos de produzir. Faremos isso indicando que estes objetos devem ser adicionados ao gráfico usando, literalmente, o operador `+`, que deve vir __ao final de cada linha__.
-
-```{r}
-ggplot(data = gapminder, mapping = aes(x = year, y = gdpPercap)) +
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = area, y = riqueza)) +
   geom_point()
 ```
 
-Outra forma de produzir o mesmo resultado é não especificarmos na função `ggplot` o que gostaríamos de desenhar, mas sim dentro da função do `geom`:
+## Definindo como `x` e `y` são representados
 
-```{r}
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot(data = ilhas, mapping = aes(x = area, y = riqueza)) +
+  geom_point()
+```
+
+## Definindo como `x` e `y` são representados
+
+* Note, no entanto, que o gráfico sugere uma forte relação não-linear - o que é esperado ao plotarmos a área contra a riqueza de espécies em sua escala natural.
+* Assim como outros pacotes, o `ggplot2` permite que adicionemos transformações às variáveis que estamos mapeando.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point()
+```
+
+## Definindo como `x` e `y` são representados
+
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point()
+```
+
+## Representando a tendência da relação entre `x` e `y`
+
+* Podemos adicionar tantas representações __geométricas__ quanto quisermos à uma figura, desde que faça sentido adicionar uma camada à outra já existente.
+* Por exemplo, podemos adicionar uma representação __geométrica__ indicando a tendência da relação entre a área e a riqueza de espécies.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## Representando a tendência da relação entre `x` e `y`
+
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## Outra forma de desenhar uma figura através do `ggplot2`
+
+* Uma maneira alternativa a criar uma figura no `ggplot2` é começando através de um gráfico em branco, e ir adicionando as informações que queremos mapear camada a camada.
+* Todavia, ao utilizar este método será necessário dizer à função quais são os dados e quais são os elementos estéticos que serão mapeados em cada camada.
+
+```{r eval=FALSE}
+ggplot()
+```
+
+## Outra forma de desenhar uma figura através do `ggplot2`
+
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot()
+```
+
+## Outra forma de desenhar uma figura através do `ggplot2`
+
+```{r fig.align='center', fig.height=4.5, fig.width=5}
 ggplot() +
-  geom_point(data = gapminder, mapping = aes(x = year, y = gdpPercap))
+  geom_point(data = ilhas, mapping = aes(x = log(area), y = log(riqueza)))
 ```
 
-A principal diferença no uso destas duas formas depende de qual será o seu objetivo final:  
-  
-+ __Especificar o conjunto de dados na função `ggplot`__, quando você quer produzir um gráfico focando em dados que estão apenas naquele conjunto especificado dentro da função `ggplot`.  
-+ __Especificar o conjunto de dados dentro da função `geom`__, quando cada `geom` vai ser produzido através de um conjunto de dados diferentes.  
+## Outra forma de desenhar uma figura através do `ggplot2` {.smaller}
 
-Por simplicidade, vamos avançar especificando o conjunto de dados dentro do `geom` e criando um objeto chamado `figura`. Vamos também fazer com que as cores dos símbolos sejam representadas pelos continentes, e modificar o formato dos pontos para que eles possam ser preenchidos.
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot() +
+  geom_point(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_smooth(data = ilhas, mapping = aes(x = log(area), y = log(riqueza)), method = "lm")
+```
 
-```{r}
-figura <- ggplot() +
-  geom_point(data = gapminder, mapping = aes(x = year, y = gdpPercap, fill = continent), shape = 21)
+## Outra forma de desenhar uma figura através do `ggplot2` {.smaller}
+
+* Finalmente, uma terceira forma de iniciar uma figura é determinando apenas o conjunto de dados de onde sairão todas as informações, e determinar o que será mapeado em cada camada
+
+```{r fig.align='center', fig.height=3, fig.width=3.5}
+ggplot(data = ilhas) +
+  geom_point(mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_smooth(mapping = aes(x = log(area), y = log(riqueza)), method = "lm")
+```
+
+## Mapear desde o início ou não?
+
+* Existe uma diferença fundamental na forma como começamos a desenhar um gráfico no `ggplot2`, que podemos usar ao nosso favor dependendo do objetivo e dados que temos:
+    + __Especificar apenas o conjunto de dados na função `ggplot`:__ útil quando todas as informações que irão para cada `geom` estão dentro de uma mesma tabela.  
+    + __Especificar o conjunto de dados e a unidade estética dentro da função `geom`:__ útil quando cada `geom` representa informações presentes em conjunto de dados diferentes. 
+    + __Especficiar o conjunto de dados e a unidade estética dentro da função `ggplot`:__ útil quando toda a figura é feita com referência àquela unidade estética vinda daquele conjunto de dados.
+* Dependendo da forma como você escolher desenhar a figura, você pode ter problemas ao definir alguns outros elementos gráficos - falaremos mais sobre isso depois.
+
+## Criando uma figura do `ggplot2` objeto-a-objeto
+
+* Não precisamos criar todas as camadas de uma vez ao desenhar uma figura no `ggplot2`: podemos criar uma camada, atribuir ela a um objeto, adicionar mais uma camada a esse objeto e sobre-escrevelo, e assim sucessivamente.
+
+```{r fig.align='center', fig.height=3, fig.width=3.5}
+figura <- ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza)))
 figura
 ```
 
-O `fill` e o `shape` são elementos que modificam o preenchimento e o formato dos pontos na figura. Além deles, podemos especificar os argumentos `size`, `colour`, `alpha` e `stroke`.
+## Criando uma figura do `ggplot2` objeto-a-objeto
 
-```{r}
-figura <- ggplot() +
-  geom_point(data = gapminder, mapping = aes(x = year, y = gdpPercap, fill = continent),
-             shape = 21, colour = "black", size = 3, stroke = 2, alpha = 0.7)
-figura
-```
-
----
-
-##### Exercício 2
-
-a. O que cada um destes argumentos faz?
-b. O que aconteceria se mapeássemos alguma variável categórica (como o continente) sob o cada um deles fora do mapping?
-c. E se fizéssemos a mesma coisa dentro do parenteses?
-d. O que acontece se mapearmos variáveis contínuas para eles?
-
----
-
-Você pode não ter gostado do jogo de cores, ou ter criado um gráfico com certos `shape` ou `colour` e não ter curtido o padrão do `ggplot`. Nesse caso, você pode editar manualmente este jogo ou definir algum padrão pré-estabelecido com as funções `scale_*_?`. Note que você só conseguirá editar manualmente estas opções __se__ elas tiverem sido mapeadas dentro de um `geom` ou na função `ggplot`.  
-  
-+ `scale_fill_?`: modifica o preenchimento do objeto (`fill`) de forma determinada pelo usuário;  
-+ `scale_colour_?`: modifica a cor dos pontos ou das bordas do objeto geométrico (`colour`) de forma determinada pelo usuário;  
-+ `scale_shape_?`: modifica o formato dos pontos (`shape`) de forma determinada pelo usuário;  
-+ `scale_size_?`: modifica o tamanho dos pontos (`size`) de forma determinada pelo usuário;  
-+ `scale_alpha_?`: modifica a transparência (`alpha`) de forma determinada pelo usuário;  
-+ `scale_linetype_?`: modifica o tipo de linha (`linetype`) de forma determinada pelo usuário;  
-+ `scale_x_?`: modifica as opções de apresentação do eixo _x_;  
-+ `scale_y_?`: modifica as opções de apresentação do eixo _y_.  
-
-```{r}
-# fornecendo um vetor de cores manualmente
-figura +
-  scale_fill_manual(values = c("red", "blue", "green", "yellow", "orange3"))
-```
-
-```{r}
-# fornecendo um vetor de cores em um gradiente de cinza
-figura +
-  scale_fill_grey(start = 0.1, end = 0.9)
-```
-
-```{r}
-# fornecendo um vetor de cores manualmente, editando os eixos x e y
+```{r fig.align='center', fig.height=4, fig.width=4.5}
 figura <- figura +
-  scale_fill_manual(values = c("red", "blue", "green", "yellow", "orange3")) +
-  scale_x_continuous(name = "Ano") +
-  scale_y_continuous(name = "Produto Interno Bruto per capita (USD)", 
-                     breaks = seq(from = 0, to = 120000, by = 20000))
+    geom_point()
 figura
 ```
 
-Além disso, podemos ainda criar diferentes painéis para plotarmos cada gráfico de acordo com as categorias de um fator.
+## Criando uma figura do `ggplot2` objeto-a-objeto
 
-```{r}
-figura +
-  facet_wrap(facets = ~ continent)
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+figura <- figura +
+    geom_smooth(method = "lm")
+figura
 ```
 
-Uma outra opção para tal é a função `facet_grid`:
+## Exercício 2
 
-```{r}
-figura +
-  facet_grid(facets = ~ continent)
+a. Crie uma figura demonstrando a relação entre a riqueza de espécies de mamíferos e a produtividade primária das ilhas.
+b. Crie um `boxplot` demonstrando de que maneira a riqueza de espécies varia em função do tipo de ilha.
+
+## Customizando um `geom`
+
+* Assim como nas figuras criadas na `base` e no `lattice`, também podemos modificar o tamanho (`size`), formato (`shape`), cor da borda (`color`), preenchimento (`fill`), grossura da linha dos símbolos (`stroke`) e das linhas (`size`), tipo de linhas (`linetype`) de cada `geom`.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4)
 ```
 
-* __Dica do R:__ diferenças entre estas duas formas de produzir estes múltiplos painéis:  
-    + `facet_wrap` é útil ao criarmos painéis de acordo com os níveis de uma variável, enquanto o `facet_grid` funciona com duas ou mais variáveis.  
-    + `facet_wrap` permite que você determine o número de linhas e colunas no painel, enquanto o `facet_grid` vai arranjar o número de linhas e colunas de acordo os níveis das variáveis mapeadas para estes painéis.  
+## Customizando um `geom`
 
----
-
-##### Exercício 3
-
-Usando o conjunto de dados `mtcars`:
-
-a. Qual a relação entre o consumo de combustível (`mpg`) e a potência dos carros (`hp`)?
-b. Como esta relação varia em função do número de cilindros do carro (`cyl`)?
-c. Como podemos visualizar esta relação de acordo com o número de cilindros e o tipo de transmissão do carro (`am`)?
-
----
-
-Cabe ressaltar aqui que caso você precise criar uma figura em múltiplos painéis, talvez seja melhor separar os dados em `data.frame` diferentes e criar figuras individualmente. Um motivo para isso é que é muito, mas muito difícil, manipular cada um dos painéis individualmente no `facet_wrap` ou `facet_grid`.
-
-Outra razão para separar os gráficos é que muitas vezes essas figuras em múltiplas painéis dizem respeito a figuras com diferentes escalas no eixo x e/ou y e/ou diferentes variáveis nos eixos x e y. Como vimos, existem várias funções no `dplyr` e `tidyr` que nos permitem fazer isso, e existem funções associadas ao `ggplot` que podem ser usadas para identificar os painéis e combiná-los posteriormente, mas não avançaremos sobre elas aqui.
-
-Como vimos, um `geom` pode ser compreendido como um tipo de gráfico a ser plotado: um `boxplot`, um `scatterplot`, um gráfico de barras, um histograma, uma regressão e por aí vai. No entanto, algumas figuras precisam ser compostas por mais de um `geom`: e.g., uma regressão, onde temos tanto os pontos, quanto a linha de tendência da relação. Assim, o `ggplot` também nos dá a opção e flexibilidade de plotarmos dois `geom` em uma mesma figura:
-
-```{r}
-# geom_smooth adiciona uma linha de tendência da relação x contra y
-# de acordo com os níveis dos fatores que tenham sido mapeados e um tipo
-# de método estatístico - padrão 'loess'
-figura +
-  facet_wrap(~ continent) +
-  geom_smooth(data = gapminder, mapping = aes(x = year, y = gdpPercap, colour = continent))
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4)
 ```
 
-```{r}
-# método lm
-figura +
-  facet_wrap(~ continent) +
-  geom_smooth(data = gapminder, mapping = aes(x = year, y = gdpPercap, colour = continent), 
-              method = "lm")
+## Customizando um `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4, shape = 21)
 ```
 
-```{r}
-# você pode modificar as opções de plotagem da linha de tendência direto no geom_smooth
-figura +
-  facet_wrap(~ continent) +
-  geom_smooth(data = gapminder, mapping = aes(x = year, y = gdpPercap, colour = continent),
-              method = "lm", size = 3, se = FALSE)
+## Customizando um `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4, shape = 21, fill = "grey50")
 ```
 
-* __Dica do R:__ aqui, cabe ressaltar três coisas muito importantes:  
+## Customizando um `geom`
 
-    + Cuidado ao usar o `geom_smooth`! Ao criar um modelo estatístico de regressão, ele __não__ representa fielmente a relação entre a variável preditora (`x`) e a variável resposta (`y`) caso hajam outras variáveis preditoras na análise (inclusive a predição do intervalo de confiança). Portanto, não use o atalho de usar o `geom_smooth` para mostrar os resultados de uma análise que você fez em um trabalho, dissertação, tese ou artigo! A linha de tendência correta para ser usada é aquela que vem da função `predict` a partir das predições do seu modelo aplicadas a um novo conjunto de dados simulados;  
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4, shape = 21, fill = "grey50", 
+             colour = "blue3")
+```
+
+## Customizando um `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4, shape = 21, fill = "grey50", 
+             colour = "blue3", stroke = 2)
+```
+
+## Customizando um `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(size = 4, shape = 21, fill = "grey50", 
+             colour = "blue3", stroke = 2, alpha = 0.4)
+```
+
+## Exercício 3
+
+a. Customize o `boxplot` que você criou no exercício anterior. Para saber que tipo de customização pode ser feita a esse `geom`, você pode consular o arquivo de ajuda dele `?geom_boxplot`.
+
+## Customizando um `geom` através da unidade estética
+
+* Quando fazemos uma análise exploratória dos dados ou até mesmo quando estamos criando uma figura para um trabalho, podemos ter como objetivo demonstrar de que forma múltiplas variáveis afetam a relação entre `x` e `y`.
+* Graficamente, quando fazemos isso na realidade estamos mapeando estas outras variáveis a um dado `geom` - isto é, fazemos as características deste `geom` variar em função dos valores destas variáveis.
+* Para tal, devemos dizer para o `ggplot` que todas aquelas características que acabamos de ver para a customização dependem dos valores estéticos que queremos mapear.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha)) +
+  geom_point()
+```
+
+## Customizando um `geom` através da unidade estética
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha)) +
+  geom_point()
+```
+
+## Customizando um `geom` através da unidade estética
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+# outra forma de fazer isso
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(mapping = aes(colour = ilha))
+```
+
+## Customizando um `geom` através da unidade estética
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+# e mais uma
+ggplot() +
+  geom_point(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha))
+```
+
+## Customizando um `geom` através da unidade estética
+
+* É importante notarmos algumas coisas ao fazermos isso:
+    + A característica que será mapeada à variável deve estar dentro do `mapping`!
+    + O nome da variável que será mapeada a alguma dessas características __nunca__ deve estar entre aspas!
+    + Ao definir que variável será mapeada a que característica logo na função `ggplot`, esta característica será mapeada da mesma forma em todas as camadas que você desenhar!
+    + Podemos mapear múltiplas variáveis ao mesmo tempo.
     
-    + O `ggplot` desenha os `geom` na ordem em que eles são adicionados. Nesse sentido, a ordem dos fatores altera o produto: e.g, plotar a linha de tendência e depois os pontos deixa os pontos mais visíveis _vs_ plotar os pontos e depois a linha de tendência reforça a mensagem desta última;  
-    
-    + Note que tivemos que especificar qual era o conjunto de dados que deveriam ser passados para o `geom_smooth`, apesar dos `geom_point` já "saber" a relação que estávamos trabalhando. Tivemos que fazer isso pois na chamada do `ggplot` havíamos criado um gráfico em branco, de forma que cada `geom` deve especificar o que ele plotará. Caso já tivéssemos anunciado na chamada do `ggplot` que iríamos plotar esta relação, não haveria a necessidade de repetirmos essa chamada no `geom_smooth`. Mais tarde iremos ver um exemplo em que misturar estas duas formas de criar gráficos também é possível.  
+## Customizando um `geom` através da unidade estética
 
----
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha,
+                                   shape = arquipelago)) +
+  geom_point()
+```
 
-##### Exercício 4
+## Customizando um `geom` através da unidade estética
 
-E se quiséssemos modificar o tipo de gráfico que queremos fazer e, por exemplo, fazer um `boxplot`?  
-a. Faça um `boxplot` usando a função `ggplot`, mostrando de que forma o `gdpPercap` varia em função do `continent`;  
-b. Modifique o preenchimento dos boxplots de acordo com a identidade do continente;  
-c. Modifique a espessura e a largura da linha dos boxplots (dica: `size`e `width`);  
-d. Suprima a plotagem dos outliers;  
-e. Mude o título do eixo y;  
-f. Edite o eixo x, de forma que:  
-    + Ele tenha um novo título;  
-    + As legendas de cada uma das categorias passe para o português.  
-g. Adicione pontos que demonstrem os valores de cada observação para cada continente.
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha,
+                                   shape = arquipelago, size = produtividade)) +
+  geom_point()
+```
 
----
+## Customizando um `geom` através da unidade estética
+
+* Também podemos combinar características mapeadas à variáveis com características mapeadas de forma fixa.
+* Mas não se esqueça: toda característica mapeada a uma variável vai dentro do parenteses, toda característica fixa vai fora dele.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(mapping = aes(colour = ilha, shape = arquipelago), size = 4)
+```
+
+## Customizando um `geom` através da unidade estética
+
+```{r fig.align='center', fig.height=4.5, fig.width=5}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  geom_point(mapping = aes(colour = ilha, shape = arquipelago), size = 4)
+```
+
+## Exercício 4
+
+a. Adicione uma linha de tendência ao gráfico abaixo. O que aconteceu e o que isso representa?
+b. Se você quisesse que houvesse apenas uma linha de tendência, como deveríamos desenhar a figura?
+c. Modifique as características da linha de tendência que você adicionou, mapeando ela à qualquer variável que você deseje.
+d. O que acontece quando invertemos a sequência como os `geom` são adicionados?
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), colour = ilha)) +
+  geom_point(size = 3)
+```
+
+## Criando múltiplos painéis a partir dos mesmo dados
+
+* Muitas vezes queremos desenhar uma figura contendo múltiplos painéis, um para cada nível ou combinação de níveis de uma dada variável.
+* O `ggplot2` oferece duas funções que permitem mapear estes painéis em múltiplos `facet`s. No entanto, note que aqui o que estamos fazendo é dividir uma mesma informação entre múltiplos painéis, e não desenhar informações diferentes em cada painel!
+    + `facet_wrap`: permite que se determine de que forma os painéis serão distribuídos entre linhas e colunas. É uma função bastante flexível.
+    + `facet_grid`: não permite que os painéis sejam distribuídos entre linhas e colunas, que são determinados de acordo com a quantidade de níveis de cada variável que se está mapeando aos painéis.
+
+## Criando múltiplos painéis a partir dos mesmo dados
+
+```{r fig.align='center', fig.height=4.5, fig.width=7}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  facet_wrap(~ ilha) +
+  geom_point(size = 3)
+```
+
+## Criando múltiplos painéis a partir dos mesmo dados
+
+```{r fig.align='center', fig.height=4.5, fig.width=7}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  facet_grid(~ ilha) +
+  geom_point(size = 3)
+```
+
+## Criando múltiplos painéis a partir dos mesmo dados
+
+```{r fig.align='center', fig.height=4.5, fig.width=7}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  facet_wrap(arquipelago ~ ilha) +
+  geom_point(size = 3)
+```
+
+## Criando múltiplos painéis a partir dos mesmo dados
+
+```{r fig.align='center', fig.height=4.5, fig.width=7}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza))) +
+  facet_grid(arquipelago ~ ilha) +
+  geom_point(size = 3)
+```
+
+## Personalizando o aspecto visual do `geom` {.smaller}
+
+* Muito do que podemos fazer manipulando a estrutura estética do que queremos desenhar só diz o que será mapeado, mas não nos permite determinar exatamente de que forma queremos que cada característica mapeada seja representa.
+* Toda a personalização do que é mapeado é feita através de camadas que descrevem a __escala__ da figura:
+    + `scale_fill_?`: modifica o preenchimento do objeto (`fill`) de forma determinada pelo usuário;  
+    + `scale_colour_?`: modifica a cor dos pontos ou das bordas do objeto geométrico (`colour`) de forma determinada pelo usuário;  
+    + `scale_shape_?`: modifica o formato dos pontos (`shape`) de forma determinada pelo usuário;  
+    + `scale_size_?`: modifica o tamanho dos pontos (`size`) de forma determinada pelo usuário;  
+    + `scale_alpha_?`: modifica a transparência (`alpha`) de forma determinada pelo usuário;  
+    + `scale_linetype_?`: modifica o tipo de linha (`linetype`) de forma determinada pelo usuário;  
+    + `scale_x_?`: modifica as opções de apresentação do eixo _x_;  
+    + `scale_y_?`: modifica as opções de apresentação do eixo _y_.  
+
+## Personalizando o aspecto visual do `geom`
+
+* Para personalizar grande parte destas escalas é necessário que aquilo que ela modifica tenha sido mapeado à alguma unidade estética.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), shape = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22))
+```
+
+## Personalizando o aspecto visual do `geom`
+
+```{r fig.align='center', fig.height=5, fig.width=6, echo=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), shape = ilha)) +
+  geom_point(size = 4) +
+  scale_shape_manual(values = c(21, 22))
+```
+
+## Personalizando o aspecto visual do `geom`
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), 
+                                   shape = ilha, fill = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue"))
+```
+
+## Personalizando o aspecto visual do `geom`
+
+```{r fig.align='center', fig.height=5, fig.width=6, echo=FALSE}
+ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), 
+                                   shape = ilha, fill = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue"))
+```
+
+## Exercício 5
+
+a. Customize o `boxplot` que apresenta de que forma a riqueza de espécies variam em função do tipo de ilha, mas fazendo um painel para cada tamanho de arquipélago e utilizando as funções `scale`.
+    + Dica: o intuito é que esta customizando leve o gráfico a ficar __apresentável__ e adequado para uma publicação, tese, documento ou qualquer coisa similar. Para tanto, é essencial que ela seja visualmente agradável e auto-explicativa!
+
+## Personalizando o aspecto visual do `geom`
+
+* Podemos utilizar as funções `scale_x_?` e `scale_y_?` para realizar diversos tipos de manipulação aos eixos `x` e `y`.
+
+```{r eval=FALSE}
+figura <- ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), 
+                                             shape = ilha, fill = ilha, colour = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue"))
+figura
+```
 
 ```{r echo=FALSE}
-ggplot(data = gapminder, mapping = aes(x = continent, y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) +
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)") +
-  scale_x_discrete(name = "Continente", labels = c("Africa", "Américas", "Ásia", "Europa", "Oceania")) +
-  geom_point(shape = 21, alpha = 0.3, size = 4)
+figura <- ggplot(data = ilhas, mapping = aes(x = log(area), y = log(riqueza), 
+                                             shape = ilha, fill = ilha, colour = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue"))
 ```
 
-* __Dica do R:__ têm três coisas aqui que pode ser útil de você saber:  
-  1. __Sobreposição dos pontos:__ o argumento `position` serve para modificar a posição relativa de algo que tenha sido plotado. Este argumento leva uma função que determina como esta sobreposição será trabalhada - alguns exemplos:  
-      + `position_jitter`: adiciona um pequeno ruído na horizontal e/ou vertical para reduzir a sobreposição;  
-      + `position_dodge`: reduz sobreposição na horizontal, mas fixa a vertical;  
-      + `position_jitterdodge`: útil para reduzir sobreposição da plotagem conjunta de pontos e boxplot;  
-      + `position_stack`: para empilhar barras em um gráfico de barras.  
-  
-```{r}
-ggplot(data = gapminder, mapping = aes(x = continent, y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) + 
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)") +
-  scale_x_discrete(name = "Continente", labels = c("Africa", "Américas", "Ásia", "Europa", "Oceania")) +
-  geom_point(shape = 21, alpha = 0.3, size = 4, position = position_jitterdodge(dodge.width = 1))
+## Personalizando o aspecto visual do `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+## adicionando um título adequado a cada eixo
+figura +
+  scale_x_continuous(name = "Área (km², log)") +
+  scale_y_continuous(name = "Riqueza de Espécies (log)")
 ```
 
-  2. __Eixo secundário:__ a partir da última atualização do `ggplot2` agora fica mais fácil plotar informações em um eixo secundário através do argumento `sec.axis` dentro da função `scale_y_?`, principalmente quando (a) o eixo secundário é uma duplicação do eixo y primário ou (b) quando o eixo secundário é uma transformação dos valores do eixo primário. Para tal, você deve especificar uma de duas funções no argumento `sec.axis`:
-      + `sec.axis = dup_axis()`, se a sua intenção é duplicar os valores do eixo primário no eixo secundário;  
-      + `sec.axis = sec_axis`, se a sua intenção é adicionar uma transformação dos valores do eixo primário no eixo secundário (ou algo similar).
-      
-```{r}
-ggplot(data = gapminder, mapping = aes(x = continent, y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) + 
-  scale_x_discrete(name = "Continente", labels = c("Africa", "Américas", "Ásia", "Europa", "Oceania")) +
-  geom_point(shape = 21, alpha = 0.3, size = 4, position = position_jitterdodge(dodge.width = 1)) +
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)", 
-                     sec.axis = sec_axis(name = "Produto Interno Bruno per capita (x 10000 USD)",
-                                         trans = ~ ./10000))
-```  
+## Personalizando o aspecto visual do `geom`
 
-
-  3. __Reordenar categorias:__ como vimos, o R ordena os níveis de um fator de acordo com a ordem alfabética. No geral, isso não é muito um problema - até chegarmos à plotagem de gráficos. No entanto, existem dois "truques" que podemos usar para colocar o eixo x de um gráfico com variáveis discretas na ordem que queremos:
-      + __Quando o objetivo é colocar os fatores em ordem decrescente da resposta:__  
-  
-```{r}
-ggplot(data = gapminder, mapping = aes(x = reorder(continent, -gdpPercap), y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) + 
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)") +
-  scale_x_discrete(name = "Continente") +
-  geom_point(shape = 21, alpha = 0.3, size = 4, position = position_jitterdodge(dodge.width = 1))
+```{r fig.align='center', fig.height=4, fig.width=5}
+## modificar a sequência de números de um dos eixos
+figura +
+  scale_x_continuous(name = "Área (km², log)", breaks = seq(from = -3, to = 12, by = 3)) +
+  scale_y_continuous(name = "Riqueza de Espécies (log)")
 ```
-  
-  
-          
-  + Alternativamente, você pode manipular o fator (variável discreta) usando as funções do pacote `forcats` - um pacote especialmente feito para lidar com variáveis que correspondem a este tipo de objeto:
-  
-```{r}
-ggplot(data = gapminder, 
-       mapping = aes(x = forcats::fct_relevel(continent, "Africa", "Oceania", "Asia", "Europe", "Americas"),
-                                       y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) + 
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)") +
-  scale_x_discrete(name = "Continente") +
-  geom_point(shape = 21, alpha = 0.3, size = 4, position = position_jitterdodge(dodge.width = 1))
-```  
 
----
+## Personalizando o aspecto visual do `geom`
 
-```{r}
-# versão do gráfico para prosseguirmos
-figura <- ggplot(data = gapminder, mapping = aes(x = continent, y = gdpPercap, fill = continent)) +
-  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1) +
-  scale_y_continuous(name = "Produto Interno Bruno per capita (USD)") +
-  scale_x_discrete(name = "Continente") +
-  geom_point(shape = 21, alpha = 0.3, size = 4)
+```{r fig.align='center', fig.height=4, fig.width=5}
+## modificar o texto dos eixos
+figura +
+  scale_x_continuous(name = "Área (km²)", breaks = seq(from = -3, to = 12, by = 3),
+                     labels = c(-3, "", "3", "", 9, "")) +
+  scale_y_continuous(name = "Riqueza de Espécies")
+```
+
+## Exercício 6
+
+a. Customize os eixos do `boxplot` que você criou no último exercício.
+
+## Personalizando o aspecto visual do `geom`
+
+* Quando criamos figuras onde os valores de um dos eixos é discreto/categórico, o R vai utilizar como sequência a ordem alfabética (ou numérica) desta variáveil. No entanto, muitas vezes, a ordem alfabética não condiz com a magnitude ou efeito daquilo que queremos demonstrar e, portanto, precisamos modificar este padrão imposto pelo R.
+* Existem duas formas principais de fazer isso.
+
+```{r eval=FALSE}
+ggplot(data = ilhas, mapping = aes(x = arquipelago, 
+                                   y = log(riqueza), fill = arquipelago)) +
+  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1)
+```
+
+## Personalizando o aspecto visual do `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=4.5}
+ggplot(data = ilhas, mapping = aes(x = arquipelago, 
+                                   y = log(riqueza), fill = arquipelago)) +
+  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1)
+```
+
+## Personalizando o aspecto visual do `geom`
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+# através da função reorder
+ggplot(data = ilhas, mapping = aes(x = reorder(arquipelago, log(riqueza)), 
+                                   y = log(riqueza), fill = arquipelago)) +
+  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1)
+```
+
+## Personalizando o aspecto visual do `geom` e da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+# através da função fct_relevel, disponível no pacote forcats
+ggplot(data = ilhas, mapping = aes(
+  x = forcats::fct_relevel(arquipelago, "pequeno", "medio", "grande"), 
+  y = log(riqueza), fill = arquipelago)) +
+  geom_boxplot(outlier.colour = NA, width = 0.5, size = 1)
+```
+
+## Uma figura-padrão, antes de prosseguirmos
+
+```{r eval=FALSE}
+figura <- ggplot(data = ilhas, 
+                 mapping = aes(x = log(area), y = log(riqueza), 
+                               shape = ilha, fill = ilha, colour = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue")) +
+  scale_x_continuous(name = "Área (km², log)", breaks = seq(from = -3, to = 12, by = 3)) +
+  scale_y_continuous(name = "Riqueza de Espécies (log)")
 figura
 ```
 
-O `ggplot2` fornece grande versatilidade e facilidade de plotagem, como temos visto até aqui. No entanto, é muito comum encontrarmos gráficos que têm essa cara do padrão do `ggplot`. Apesar de não haver nada errado com isso, muitas vezes não é tão "agradável" assim usar este padrão, seja por conta do fundo cinza (horroroso), seja através dessas linhas de grade, ou até mesmo pela cor e tamanho das fontes. Por conta disso, devemos sempre modificar o `theme` de um gráfico que estamos criando no `ggplot`.
+```{r echo=FALSE}
+figura <- ggplot(data = ilhas, 
+                 mapping = aes(x = log(area), y = log(riqueza), 
+                               shape = ilha, fill = ilha, colour = ilha)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm") +
+  scale_shape_manual(values = c(21, 22)) +
+  scale_fill_manual(values = c("firebrick2", "deepskyblue")) +
+  scale_x_continuous(name = "Área (km², log)", breaks = seq(from = -3, to = 12, by = 3)) +
+  scale_y_continuous(name = "Riqueza de Espécies (log)")
+```
 
-Existem alguns `theme` já pré-editados disponíveis no `ggplot2` e no pacote `ggthemes`.
+## Personalizando o aspecto visual da figura
 
-```{r}
-# tema em preto e branco
+* Um importante aspecto negligenciado por grande parte das pessoas que acabam usando o `ggplot2` é esse fundo cinza e grids, que são legais para explorar visualmente os dados, mas são péssimos para uma publicação.
+* Esses e outros aspectos visuais gerais de um gráfico do `ggplot2` são o __tema__ dele, sendo controlados por uma função de mesmo nome - `theme`.
+* __Sempre modifique e edite o tema que você usa ao criar uma figura do ggplot!__
+
+## Personalizando o aspecto visual da figura
+
+* Existem muitos temas pré-definidos disponíveis no `ggplot2` quando você carrega o pacote.
+
+```{r fig.align='center', fig.height=4, fig.width=5}
 figura +
   theme_bw()
 ```
 
-```{r}
-# formato mais clássico de um gráfico
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
 figura +
   theme_classic()
 ```
 
-```{r}
-# um dos temas disponíveis no pacote ggthemes
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
 figura +
-  ggthemes::theme_economist()
+  theme_minimal()
 ```
 
-Entretanto, ao invés de usar estas opções pré-editadas de `theme`, sugiro que sempre tentemos editar manualmente estas opções, através da função `theme()`. Aqui, existem diversas opções a serem editadas, em grande parte de forma bem intuitiva. Além disso, cada uma dessas opções de edição pode ser resumida em quatro "tipos" principais de elementos:  
-  
-* `element_text`: elementos textuais;   
-* `element_rect`: elementos que têm a forma de um retângulo;  
-* `element_line`: elementos que têm a forma de linha;  
-* `element_blank`: suprime uma opção.  
+## Personalizando o aspecto visual da figura
 
-```{r}
-figura + 
-  theme(axis.text = element_text(face = "bold", size = 16, colour = "black"),
-        axis.title = element_text(face = "bold", size = 18, colour = "black"),
-        axis.text.x = element_text(face = "italic", size = 20, colour = "blue"),
-        panel.grid = element_blank(), 
-        panel.background = element_rect(fill = "white", color = "black"),
-        axis.ticks = element_line(colour = "black"),
-        axis.ticks.length = unit(x = 0.25, units = "cm"))
-```
+* E existem outros temas pré-definidos disponíveis em outros pacotes, como no `ggthemes`.
 
-Além disso, o `theme` que nós personalizarmos pode ser armazenado como um objeto, e usado diretamente ao criarmos um gráfico do `ggplot`. Isto se torna muito útil uma vez que "acertamos" o tipo de características que queremos em um gráfico e/ou queremos produzir múltiplos gráficos com a aparência semelhante.
-
-```{r}
-# criando um objeto para armazenar as opções do tema
-meu_tema <-   theme(axis.text = element_text(face = "bold", size = 16, colour = "black"),
-                    axis.title = element_text(face = "bold", size = 18, colour = "black"),
-                    axis.text.x = element_text(face = "italic", size = 20, colour = "blue"),
-                    panel.grid = element_blank(), 
-                    panel.background = element_rect(fill = "white", color = "black"),
-                    axis.ticks = element_line(colour = "black"),
-                    axis.ticks.length = unit(x = 0.25, units = "cm"),
-                    legend.position = "none")
-```
-
-```{r}
-# usando o objeto criado para o nosso tema
+```{r fig.align='center', fig.height=4, fig.width=5, warning=FALSE, message=FALSE}
+library(ggthemes)
 figura +
-  meu_tema
+  theme_base()
 ```
 
----
+## Personalizando o aspecto visual da figura
 
-##### Exercício 5
-
-Crie um gráfico utilizando o conjunto de dados `mtcars`, demonstrando a relação entre a potência do carro `hp` e peso do carro `wt`, e:  
-a. Modifique pelo menos 3 opções gráficas dos pontos;  
-b. Modifique os títulos dos dois eixos;  
-c. Modifique os `breaks` de pelo menos um dos eixos;  
-d. Crie um tema para modificar essa cara de gráfico do `ggplot`.  
-
----
-
-Uma observação importante é que podemos também modificar o sistema de coordenadas de um gráfico do R. Um exemplo de modificação destas coordenadas é no caso de querermos inverter os eixos x e y no gráfico final (`coord_flip`). Outras aplicações são na criação de gráficos de pizza (`coord_polar`) e na criação de mapas (`coord_quickmap` e `coord_map`).
-
-```{r}
+```{r fig.align='center', fig.height=4, fig.width=5, warning=FALSE, message=FALSE}
 figura +
-  meu_tema +
-  coord_flip()
+  theme_excel_new()
 ```
 
-Dentro das opções `coord_?` também podemos determinar quais são os limites dos eixos x e y, bem como determinar se queremos que o `ggplot` adicione um espaço extra para além destes limites que traçamos.
+## Personalizando o aspecto visual da figura
 
-```{r}
-figura + 
-  meu_tema+
-  coord_cartesian(ylim = c(0, 120000), expand = FALSE)
-```
-
-Muitos destes últimos parametros gráficos também podem ser manipulados de forma direta como funções ou argumentos em outras funções:  
-  
-+ função `ylim` para traçar os limites do eixo y;  
-+ função `ylab` para adicionar uma legenda ao eixo y;  
-+ função `xlim` para traçar os limites do eixo x;  
-+ função `xlab` para adicionar uma legenda ao eixo x;  
-+ argumento `limits` em `scale_x_?` ou `scale_y_?` para traçar os limites do eixo x e y, respectivamente;  
-+ argumento `expand` em `scale_x_?` ou `scale_y_?` para determinar se deve ser adicionado um fator de expansão aos limites do plot.  
-  
-Por fim, às vezes precisamos adicionar algum tipo de informação a um gráfico já criado: um texto, algum desenho ou mesmo um outro gráfico (_inset_). Fazer estes _insets_ é bem trabalhoso, mas possível no R - portanto, só quero que você saiba que existe essa opção, mas não vamos tratar disto aqui. Por outro lado, é bem simples adicionar algum texto ou desenho extra em um gráfico criado, através da função `annotate`.  
-
-```{r}
-figura +
-  meu_tema +
-  annotate(geom = "text", x = 3, y = 92000, label = "Escrevendo uma mensagem", fontface = "bold", size = 8)
-```
-
----
-
-O `ggplot2` pode interagir com os outros pacotes que compõem o `tidyverse`. Isto é muito útil, pois reduz ainda mais a distância entre a pergunta e a resposta. Por exemplo: como variou o produto interno bruto per capita no Brasil ao longo dos anos?
-
-```{r}
-# dados do GDP para o Brasil
-dados_brasil <- gapminder %>% 
-  filter(country == "Brazil") %>% 
-  select(year, gdpPercap)
-
-# criando figura para mostrar relação
-ggplot(data = dados_brasil, mapping = aes(x = year, y = gdpPercap)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  meu_tema
-```
-
-Podemos aproveitar essa integração para criar variáveis antes de criarmos a figura:
-
-```{r}
-# dados do GDP para o Brasil
-dados_brasil <- gapminder %>% 
-  filter(country == "Brazil") %>% 
-  mutate(log_populacao = log10(pop))
-
-# criando figura para mostrar relação
-ggplot(data = dados_brasil, mapping = aes(x = year, y = gdpPercap, size = log_populacao, fill = lifeExp)) +
-  geom_point(shape = 21) +
-  geom_smooth(method = "lm") +
-  meu_tema
-```
-
-Entretanto, fazer parte do `tidyverse` traz também a vantagem de integrarmos toda a manipulação de dados com a criação da figura através do operador `pipe` - sem a necessidade de dizer qual o conjunto de dados estamos trabalhando:
-
-```{r}
-gapminder %>% 
-  filter(country == "Brazil") %>% 
-  mutate(log_populacao = log10(pop)) %>% 
-  ggplot(mapping = aes(x = year, y = gdpPercap, size = log_populacao, fill = lifeExp)) +
-  geom_point(shape = 21) +
-  geom_smooth(method = "lm") +
-  meu_tema
-```
-
-Dessa forma, fazer gráficos usando o `ggplot2` e as demais ferramentas do `tidyverse` não é só mais intuitivo, mas muito mais prático do que se usarmos as funções da `base` do R. 
-
----
-
-##### Exercício 6
-
-Gráficos de barra e erro padrão da média (ou gráficos de ponto e intervalos de confiança de 95%) são duas coisas muito comuns que nós, ecólogos gostamos de fazer. Vamos praticar a manipulação de dados com a criação de figuras de forma integrada com o operador `pipe` usando o conjunto de dados das enquetes, que limpamos anteriormente (todas as perguntas devem ser respondidas com gráficos). Note que em cada uma das tarefas, é necessário: ajustar o `theme`, ajustar os eixos x e y (limits, expand, títulos, breaks) e customizar as cores/shape das barras e/ou pontos.
-
-a. Carregue o conjunto de dados limpos das enquetes, que limpamos na aula anterior - ele está no diretório `11_manipulacao_de_dados`, no sub-diretorio `dados` e recebeu o nome de `dados_limpos.xls`. Caso você queira, renomeie os nomes das colunas para que fique mais fácil fazer as operações a seguir.  
-b. Quantas pessoas já fizeram esta disciplina? (__dica:__ `geom_bar`)  
-c. Quantas pessoas fizeram esta disciplina em cada um dos anos que ela foi ofertada? (__dica:__ `geom_bar`)  
-d. Quantas pessoas que fizeram esta disciplina já haviam usado o R? (__dica:__ `geom_bar`)  
-e. Este padrão parece diferir entre esta turma e a anterior?  
-f. Quantos cursos em média (e o erro padrão da média) cada aluno já havia feito antes de prestar esta disciplina (apresente o gráfico como um ponto e o erro padrão da média como linhas; __dica:__ `geom_point` e `geom_errorbar`)?  
-g. Para os alunos que não são ouvintes da disciplina, qual o prazo médio para a defesa? Separe os alunos entre estudantes de mestrado e de doutorado, use um gráfico de barras e apresente o intervalo de confiança de 95% (__dica:__ `geom_bar` e `geom_errorbar`).  
-
----
-
-Na aula do `plot` na `base` do função R, vimos que para termos uma figura de alta qualidade não devemos usar a opção `Export` na aba `Plot`. Lá, vimos que podemos usar as funções `pdf`, `tiff` e `jpeg` (por exemplo) para gerar e salvar o gráfico de alta qualidade em nosso computador.
-
-O `ggplot2` possui uma função especial para isso: a função `ggsave`. Esta função elimina a necessidade de usar uma função em especial para cada formato de arquivo que você quer usar, pois você determina diretamente nela o tipo de extensão do arquivo gerado e todas as demais informações.  
+* Mas como tudo no `ggplot2`, o ideal é sempre personalizarmos aquilo que estamos desenhando. Para modificar o __tema__ desta forma, precisamos modificar os padrões de valores que existe dentro da função `theme`, adicionando esta camada de personalização à nossa figura.
 
 ```{r eval=FALSE}
-ggsave(filename = "figuras/exemplo.pdf", plot = figura, width = 15, height = 10, dpi = 200)
+theme()
 ```
 
-* __Dica do R:__ para gráficos com mais de um painel, você pode usar as funções nos pacotes `grid` e `grid.Extra` para juntar os múltiplos painéis, e depois usar as funções do pacote `base` ou o `ggsave` para salvá-las.
+## Personalizando o aspecto visual da figura
+
+* Todos os elementos do __tema__ são manipulados de acordo com a sua natureza:
+    + `element_text`: elementos textuais;   
+    + `element_rect`: elementos que têm a forma de um retângulo;  
+    + `element_line`: elementos que têm a forma de linha;  
+    + `element_blank`: suprime uma opção.  
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+figura +
+  theme(legend.position = "none")
+```
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+figura +
+  theme(legend.position = "none",
+        panel.grid = element_blank())
+```
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=4, fig.width=5}
+figura +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        panel.background = element_blank())
+```
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=3, fig.width=4}
+figura +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=3, fig.width=4}
+figura +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", size = 12))
+```
+
+## Personalizando o aspecto visual da figura
+
+```{r fig.align='center', fig.height=3, fig.width=4}
+figura +
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", size = 12),
+        axis.title = element_text(colour = "black", size = 14, face = "bold"))
+```
+
+## Personalizando o aspecto visual da figura
+
+* O `ggplot2` também permite que coloquemos as especificações do tema que personalizamos em um objeto, o qual podemos adicionar diretamente à figura que criamos.
+
+```{r}
+meu_tema <- theme(legend.position = "none",
+                  panel.grid = element_blank(),
+                  panel.background = element_blank(),
+                  axis.line = element_line(colour = "black"),
+                  axis.text = element_text(colour = "black", size = 12),
+                  axis.title = element_text(colour = "black", size = 14, face = "bold"))
+```
+
+## Personalizando o aspecto visual da figura
+
+* A vantagem disso é que definimos uma única vez um tema e podemos empregá-lo em tantas figuras quanto quisermos.
+
+```{r fig.align='center', fig.height=3, fig.width=4}
+figura <- figura +
+  meu_tema
+figura
+```
+
+## Exportando figuras do `ggplot2` {#anchor3}
+
+* Podemos exportar uma figura que criamos através do `ggplot2` utilizando a função `ggsave`.
+
+```{r eval=FALSE}
+ggsave(filename = "especie_area.png", # nome/diretorio onde a figura será salva
+       plot = figura, # objeto que contém a figura que você quer exportar
+       width = 80, height = 80, units = "mm", # tamanho final da figura
+       dpi = 150 # qualidade da imagem
+       )
+```
+
+## Exercício 7
+
+a. Personalize o tema do `boxplot` que você tem trabalhado nos exercícios anteriores, e exporte ele para algum diretório no seu computador.  
+
+## Integrando o `ggplot2` ao `tidyverse` {#anchor4}
+
+* Uma das figuras que normalmente queremos fazer é aquela onde apresentamos o valor da média e do erro padrão de acordo com diferentes níveis de uma variável categórica.
+* Uma forma de fazer isso no `ggplot2` é fornecendo uma tabela que contenha estes valores para a função `ggplot`, e associando o `geom_bar` ao `geom_errorbar`.
+* Este requerimento impõem então uma tarefa prévia para criarmos este tipo de figura a partir da tabela de dados que normalmente temos, pois precisamos calcular estes sumários estatísticos antes de criar a figura.
+* Neste sentido, podemos utilizar as mesmas técnicas de manipulação, limpeza e processamento de dados que vimos nas aulas anteriores.
+
+## Exercício 8
+
+a. Calcule o valor médio e o erro padrão da riqueza de espécies por tipo de ilha, e coloque os resultados deste processamento no objeto __sumario__.
+
+```{r echo=FALSE}
+sumario <- ilhas %>% 
+  group_by(ilha) %>% 
+  summarise(riqueza_media = mean(riqueza, na.rm = TRUE),
+            erro = sd(riqueza, na.rm = TRUE)/sqrt(n()))
+sumario
+```
+
+## Integrando o `ggplot2` ao `tidyverse`
+
+* Agora, com essa tabela de dados, podemos criar a figura que queremos.
+
+```{r fig.align='center', fig.height=3, fig.width=4}
+ggplot(data = sumario, mapping = aes(x = ilha, y = riqueza_media, fill = ilha)) +
+  geom_bar(stat = "identity", colour = "black") +
+  geom_errorbar(mapping = aes(ymin = riqueza_media - erro, ymax = riqueza_media + erro), 
+                width = 0.5)
+```
+
+## Exercício 9
+
+* Personalize a figura anterior:
+    + Modificando a cor da barra que cada categoria recebe;
+    + Editando os nomes e os valores dos eixos `x` e `y`, respectivamente;
+    + Editando o título dos eixos `x` e `y`;
+    + Removendo o espaço que aparece abaixo do 0 no eixo `y`.
+
+## Integrando o `ggplot2` ao `tidyverse` {.smaller}
+
+* Note, no entanto, que o `ggplot2` é parte integrante do `tidyverse`, que foi todo pensado com a finalidade de encurtar a distância entre a ideia e o resultado.
+* Portanto, podemos integrar todo o cálculo prévio da média e erro ao uso da função `ggplot`.
+
+```{r eval=FALSE}
+ilhas %>% 
+  group_by(ilha) %>% 
+  summarise(riqueza_media = mean(riqueza, na.rm = TRUE),
+            erro = sd(riqueza, na.rm = TRUE)/sqrt(n())) %>% 
+  ggplot(data = sumario, mapping = aes(x = ilha, y = riqueza_media, fill = ilha)) +
+  geom_bar(stat = "identity", colour = "black") +
+  geom_errorbar(mapping = aes(ymin = riqueza_media - erro, ymax = riqueza_media + erro), 
+                width = 0.5)
+```
+
+## Integrando o `ggplot2` ao `tidyverse`
+
+```{r fig.align='center', fig.height=5, fig.width=6, echo=FALSE}
+ilhas %>% 
+  group_by(ilha) %>% 
+  summarise(riqueza_media = mean(riqueza, na.rm = TRUE),
+            erro = sd(riqueza, na.rm = TRUE)/sqrt(n())) %>% 
+  ggplot(data = sumario, mapping = aes(x = ilha, y = riqueza_media, fill = ilha)) +
+  geom_bar(stat = "identity", colour = "black") +
+  geom_errorbar(mapping = aes(ymin = riqueza_media - erro, ymax = riqueza_media + erro), 
+                width = 0.5)
+```
+
+## Uma mensagem final
+
+* Utilize o `ggplot2` como uma ferramenta para a análise exploratória e visualização dos dados, mas não utilize diretamente o resultado daquilo que você produz através dele nas suas publicações.
+* O principal motivo para isso é que muito do que queremos mostrar visualmente em uma publicação são os resultados das análises estatísticas, que descrevem a relação entre as variáveis considerando toda a dependência numérica e outras peculiaridades que existem nos seus dados.
+* Nesse sentido, produza os resultados numéricos das suas análises estatísticas e utilize eles para criar as figuras no `ggplot2`. Veremos como fazer isso na próxima aula.
+
+## Exercício 10
+
+* Utilizando o conjunto de dados __gapminder__:
+    + Calcule o GDP per capita médio por continente considerando apenas os dados do ano de 2007.
+    + Crie uma figura demonstrando como variou o tamanho da população brasileira ao longo do tempo.
+    + Crie uma figura demonstrando de que forma a expectativa de vida varia ao longo do tempo para cada país, mas dividindo os padrões em diferentes painéis de acordo com o continente.
 
 ## Mais sobre o `ggplot2`
 
