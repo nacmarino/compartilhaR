@@ -23,102 +23,196 @@ h1,h2,h3,h4,h5,h6{
 }
 </style>
 
-## Base de dados relacionais
+## Estrutura da Aula
 
-Quando estamos trabalhando com um conjunto de dados, normalmente pensamos em manter todas as informações juntas em um único arquivo. Por um lado, isso nos ajuda a saber onde está um determinado dado que podemos vir a necessitar. Por outro lado, nem todo dado pode ser incluído da mesma forma em uma tabela:
-* Dados das características das espécies _vs_ dados da abundância das espécies;
-* Dados abióticos _vs_ dados bióticos;
-* Dados das coordenadas amostradas _vs_ dados dos arquivos de mapas;
-* Dados necessários para o cálculo de uma variável composta (e.g., vazão de um rio, emissão de CO~[2]~, dados para o cálculo de alcalinidade da água);
-* ...
+1. [Dados relacionais](#anchor1)
+2. [Funções `join` - mutate](#anchor2)
+3. [Funções `join` - filter](#anchor3)
 
-Nestes casos, podemos pensar em separar cada conjunto de dados em diferentes tabelas de acordo com a sua natureza, e usar uma característica em comum entre estas tabelas para que possamos casar as informações posteriormente. Este tipo de linha de raciocínio é àquela usada para construirmos e usarmos uma base de dados relacional. Para entendermos melhor o que é isso, vamos criar três conjunto de dados: `abioticos`, `bioticos` e `traits`.
+## Dados relacionais {.smaller} {#anchor1}
 
-```{r}
-# dados abioticos
-abioticos <- data_frame(site = c("site1", "site2", "site3", "site4", "site5"),
-                        var1 = rpois(n = 5, lambda = 100),
-                        var2 = c("A", "A", "B", "B", "C"))
+* Quando estamos trabalhando com um conjunto de dados, normalmente pensamos em manter todas as informações juntas em um único arquivo.
+* Apesar disso, nem todo dado pode ser incluído da mesma forma em uma tabela:
+    * Dados das características das espécies _vs_ dados da abundância das espécies;
+    * Dados abióticos _vs_ dados bióticos;
+    * Dados das coordenadas amostradas _vs_ dados dos arquivos de mapas;
+    * Dados necessários para o cálculo de uma variável composta (e.g., vazão de um rio, emissão de CO~[2]~, dados para o cálculo de alcalinidade da água);
+    * ...
+* Além disso, é provável que ao tentar manter todos os dados em um único arquivo você acabe se repetindo bastante.
 
-# dados bioticos
-bioticos <- data_frame(site = c("site1", "site2", "site3", "site4", "site6"),
-           sp1 = rnbinom(n = 5, size = 2, mu = 10),
-           sp2 = rnbinom(n = 5, size = 1, mu = 10),
-           sp3 = rnbinom(n = 5, size = 0.2, mu = 10),
-           sp4 = rnbinom(n = 5, size = 0.5, mu = 10))
+## Dados relacionais {.smaller}
 
-# traits
-traits <- data_frame(especie = paste0("sp",1:4),
-                     trait1 = c("pequeno", "pequeno", "medio", "grande"),
-                     trait2 = c("predador", "herbivoro", "herbivoro", "predador"),
-                     trait3 = c(33, 35, 39, 20))
+* Uma solução para isso é criar uma estrutura de base de __dados relacionais__.
+* De acordo com este tipo de estrutura, os dados são armazenados em diferentes tabelas, que compartilham certos elementos que descrevem a inter-relação entre elas.
 
+<p align="center">
+<img src="figures/relational.png" height="400px"></img>
+</p>
+
+## Utilizando a estrutura relacional no R {.smaller}
+
+* Uma vez que tenhamos um conjunto de dados relacionais, podemos utilizar as funções `join` para realização a manipulação e processamento dos dados.
+* Existem duas famílias de função `join`:
+    + __Mutate join:__ junta duas tabelas em uma nova tabela, mudando ou não o número de linhas e mantendo as colunas das duas tabelas.
+        + `inner_join`
+        + `left_join`
+        + `right_join`
+        + `full_join`
+    + __Filter join:__ junta duas tabelas, sempre mudando o número de linhas e mantendo as colunas de apenas uma delas.
+        + `semi_join`
+        + `anti_join`
+
+## Para seguir a demonstração {.smaller}
+
+* Para trabalhar os exemplos a seguir, vamos criar duas tabelas com estrutura relacional (como usamos um `tibble`, precisamos carregar o tidyverse` também).
+
+```{r eval=FALSE}
+library(tidyverse)
+df1 <-  tibble(id = c(1, 2, 3), x = c("x1", "x2", "x3"))
 ```
 
-Quais são os elementos que estas três tabelas compartilham em comum?  
-1. a tabela `abioticos` compartilha o nome do site com a tabela `bioticos`;  
-2. a tabela `bioticos` compartilha os nomes das espécies (nas colunas) com a tabela `traits` (nas linhas).  
-
-Nós podemos usar estas características em comum para fazermos operações que juntem as três tabelas ou duas delas por vez. Estas funções estão listadas abaixo:
-
-* `inner_join`: combina pares de observações sempre que existir uma informação (__chave__) em comum, __mantendo as observações que apareçam em abas as tabelas - informações não compartilhadas são excluídas__:  
-
-```{r}
-inner_join(x = abioticos, y = bioticos, by = "site")
-```
-  
-Existem funções também que fazem o __outer join__: combinam duas tabelas, __mantendo observações que apareçam em pelo menos uma tabela__. São três funções que seguem este tipo:  
-  
-+ `left_join`: mantém todas as observações da planilha da esquerda (`x`), completando as observações faltantes da planilha da direita (`y`) com `NA`.  
-    
-```{r}
-left_join(x = abioticos, y = bioticos, by = "site")
-```    
-  
-+ `right_join`: mantém todas as observações da planilha da direta (`y`), completando as observações faltantes da planilha da esquerda (`x`) com `NA`.  
-  
-```{r}
-right_join(x = abioticos, y = bioticos, by = "site")
-```      
-    
-+ `full_join`: mantém todas as observações da planilha da esquerda (`x`) e da direta (`y`), completando as observações faltantes das duas planilhas com `NA`
-
-```{r}
-full_join(x = abioticos, y = bioticos, by = "site")
-```   
-
-Existe também uma outra forma de realizar esta junção entre tabelas, através de um __filtering join__: combinam duas tabelas, __mantendo as observações e variáveis que apareçam em uma única tabela__. Neste sentido, podemos compreender o nome _filtering_, pois são funções que funcionam como o _filter_ (apenas as linhas que cumprem com uma condição são mantidas). São duas funções que seguem este tipo: 
-  
-+ `semi_join`: compara duas planilhas e remove as observações que são únicas à planilha da esquerda (`x`):  
-  
-```{r}
-semi_join(x = abioticos, y = bioticos, by = "site")
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+(df1 <-  tibble(id = c(1, 2, 3), x = c("x1", "x2", "x3")))
 ```
 
-+ `anti_join`: compara duas planilhas e retorna apenas as observações que são únicas à planilha da esquerda (`x`) 
-
-```{r}
-anti_join(x = abioticos, y = bioticos, by = "site")
+```{r eval=FALSE}
+df2 <- tibble(id = c(1, 2, 4), y = c("y1", "y2", "y3"))
 ```
 
-Estas funções são muito úteis para trabalharmos com bases de dados relacionais, e também ao realizarmos operações durante a análise de dados que requerem filtrar uma planilha de acordo com informações em outra planilha. Se combinadas com as demais funções do `dplyr` e do `tidyr`, elas tornam a manipulação de dados diretamente no R muito mais fácil do que se tivéssemos que fazer tudo manualmente.
+```{r echo=FALSE}
+(df2 <- tibble(id = c(1, 2, 4), y = c("y1", "y2", "y3")))
+```
 
-* __Dica do R:__ existem três coisas que podem ser úteis ao seu favor ao usar estas funções de dados relacionais:  
-    + Se você não especificar o valor de `by`, a função vai buscar qual é a coluna com nome similar é compartilhada entre elas (pode dar muito certo ou muito errado).  
-    + Você pode especificar mais de uma coluna em `by`.
-    + O 'encontro' entre as linhas correspondentes ocorre mesmo que elas estejam desalinhadas entre as planilhas. Isto é, e.g., se as linhas da planilha `x` estiverem em uma ordem diferente daquelas da planilha `y`, a função é capaz de fazer o casamento de forma correta. Isto não aconteceria se, por exemplo, você usasse a função `cbind` ou `cbind.data.frame`.
+## `inner_join` {#anchor2}
 
----
+* Retorna uma nova tabela com todas as linhas que `x` e `y` tem em comum, e todas as colunas de `x` e `y`.
 
-##### Exercício 15
+<p align="center">
+<img src="figures/inner.png" height="200px"></img>
+</p>
 
-Você percebeu que não mexemos na planilha `traits`? Vamos fazer isso agora. Com os conhecimentos adquiridos aqui:
+## `inner_join`
 
-a. Junte as informacoes da planilha `abioticos` com àquelas da planilha `bioticos`, e guarde isto em um objeto;
-b. Transforme este objeto do formato largo para o formato longo, e guarde esta operação em outro objeto;
-c. Vamos adicionar as informacoes de `traits` ao objeto que você acabou de criar?  
-d. Qual a abundância total de espécies por site?
-e. Qual a abundância total de espécies predadoras?
-f. Qual a abundância total de espécies de tamanho de corpo pequeno por site?
+```{r}
+inner_join(x = df1, y = df2, by = "id")
+```
 
----
+## `left_join`
+
+* Retorna uma nova tabela com todas as linhas de `x` e todas as colunas de `x` e `y`. Um __`NA`__ é retornado para os valores das colunas de `y` onde não houver correspondência com as linhas de `x`.
+
+<p align="center">
+<img src="figures/left.png" height="200px"></img>
+</p>
+
+## `left_join`
+
+```{r}
+left_join(x = df1, y = df2, by = "id")
+```
+
+## `right_join`
+
+* Retorna uma nova tabela com todas as linhas de `y` e todas as colunas de `x` e `y`. Um __`NA`__ é retornado para os valores das colunas de `x` onde não houver correspondência com as linhas de `y`.
+
+<p align="center">
+<img src="figures/right.png" height="200px"></img>
+</p>
+
+## `right_join`
+
+```{r}
+right_join(x = df1, y = df2, by = "id")
+```
+
+## `full_join`
+
+* Retorna uma nova tabela com todas as linhas e colunas de `x` e `y`. Um __`NA`__ é retornado para os valores das colunas de `y` onde não houver correspondência com as linhas de `x`, e vice-versa.
+
+<p align="center">
+<img src="figures/full.png" height="200px"></img>
+</p>
+
+## `full_join`
+
+```{r}
+full_join(x = df1, y = df2, by = "id")
+```
+
+## Funções `join` com mais de um elemento relacional
+
+* Nos exemplos anteriores, o argumento `by` sempre recebe um _vetor_ que contém o elemento que descreve a relação entre as duas tabelas que se quer unir (`x` e `y`).
+* Assim, podemos passar um vetor com tantos elementos quanto quisermos para descrever a relação entre duas tabelas.
+
+```{r}
+df3 <- tibble(id1 = c(1, 1, 1, 1, 2, 2, 2, 2),
+              id2 = c("a", "b", "a", "a","a", "b", "b", "b"), 
+              x = c("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8"))
+df4 <- tibble(id1 = c(1, 1, 2, 2), 
+              id2 = c("a", "b", "a", "b"),
+              y1 = c("y1", "y2", "y3", "y4"))
+```
+
+## Funções `join` com mais de um elemento relacional
+
+```{r}
+inner_join(x = df3, y = df4, by = c("id1", "id2"))
+```
+
+## `semi_join` e `anti_join` {#anchor3}
+
+* `semi_join`: retorna uma nova tabela com todas as linhas que `x` e `y` tem em comum, retendo apenas as colunas de `x`.
+* `anti_join`: retorna uma nova tabela com as linhas que `x` que __não são compartilhadas__ com `y` , retendo apenas as colunas de `x`.
+
+<p align="center">
+<img src="figures/semi_anti.png" height="250px"></img>
+</p>
+
+## `semi_join` e `anti_join` 
+
+* `semi_join`: retorna uma nova tabela com todas as linhas que `x` e `y` tem em comum, retendo apenas as colunas de `x`.
+
+```{r}
+semi_join(x = df1, y = df2, by = "id")
+```
+
+## `semi_join` e `anti_join` 
+
+* `anti_join`: retorna uma nova tabela com as linhas que `x` que __não são compartilhadas__ com `y` , retendo apenas as colunas de `x`.
+
+```{r}
+anti_join(x = df1, y = df2, by = "id")
+```
+
+## `Filter join` sem o uso das funções `join` correspondentes {.smaller}
+
+* Uma das formas de determinar a similaridade entre dois vetores é através de um teste lógico.
+
+```{r}
+df1$id %in% df2$id
+```
+
+* Como o resultado desse teste é um vetor lógico, poderíamos utilizar essa informação para realizar a indexação de uma das tabelas.
+
+```{r}
+## resultado similar ao semi_join
+df1[df1$id %in% df2$id,]
+```
+
+## `Filter join` sem o uso das funções `join` correspondentes
+
+* Por outro lado, podemos usar a função `filter` para obter o mesmo resultado.
+
+```{r warning=FALSE}
+filter(.data = df1, id %in% df2$id)
+```
+
+## Exercício 1
+
+a. Carregue todos os dados referentes ao financiamento de pesquisa do CNPq (__projetos__, __revistas__ e __publicacoes__);  
+b. Determine qual(is) variável(is) descreve(m) a relação entre estas três tabelas de dados;  
+c. Calcule o número médio de publicacões e o número médio de citações dos trabalho publicados para cada projeto financiado;  
+d. Calcule o índice de impacto médio e máximo (i.e., SJR) das publicacoes de cada projeto;  
+e. Adicione estas informações à tabela que descreve as características gerais de cada projeto;  
+f. Importe estas informações, utilizando o formato `.csv`.  
