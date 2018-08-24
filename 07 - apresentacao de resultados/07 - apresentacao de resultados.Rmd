@@ -291,8 +291,7 @@ ilhas
 ```{r eval=FALSE,fig.align='center', fig.width=5, fig.height=4}
 ggplot(data = ilhas) +
   geom_point(mapping = aes(x = log(area), y = log(riqueza), colour = ilha), size = 3) +
-  geom_smooth(mapping = aes(x = log(area), y = log_riqueza_predita, colour = ilha), 
-              method = "lm") +
+  geom_line(mapping = aes(x = log(area), y = log_riqueza_predita, colour = ilha)) +
   theme_bw()
 ```
 
@@ -301,8 +300,7 @@ ggplot(data = ilhas) +
 ```{r fig.align='center', fig.width=5, fig.height=4}
 ggplot(data = ilhas) +
   geom_point(mapping = aes(x = log(area), y = log(riqueza), colour = ilha), size = 3) +
-  geom_smooth(mapping = aes(x = log(area), y = log_riqueza_predita, colour = ilha), 
-              method = "lm") +
+  geom_line(mapping = aes(x = log(area), y = log_riqueza_predita, colour = ilha)) +
   theme_bw()
 ```
 
