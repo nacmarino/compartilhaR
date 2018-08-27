@@ -186,18 +186,18 @@ df1 &lt;-  tibble(id = c(1, 2, 3), x = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x
 <pre >## # A tibble: 3 x 2
 ##      id x    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     1 x1   
-## 2     2 x2   
-## 3     3 x3</pre>
+## 1    1. x1   
+## 2    2. x2   
+## 3    3. x3</pre>
 
 <pre class = 'prettyprint lang-r'>df2 &lt;- tibble(id = c(1, 2, 4), y = c(&quot;y1&quot;, &quot;y2&quot;, &quot;y3&quot;))</pre>
 
 <pre >## # A tibble: 3 x 2
 ##      id y    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     1 y1   
-## 2     2 y2   
-## 3     4 y3</pre>
+## 1    1. y1   
+## 2    2. y2   
+## 3    4. y3</pre>
 
 </article></slide><slide class=""><hgroup><h2><code id="anchor2">inner_join</code></h2></hgroup><article  id="inner_join">
 
@@ -218,8 +218,8 @@ df1 &lt;-  tibble(id = c(1, 2, 3), x = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x
 <pre >## # A tibble: 2 x 3
 ##      id x     y    
 ##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1     1 x1    y1   
-## 2     2 x2    y2</pre>
+## 1    1. x1    y1   
+## 2    2. x2    y2</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>left_join</code></h2></hgroup><article  id="left_join">
 
@@ -240,9 +240,9 @@ df1 &lt;-  tibble(id = c(1, 2, 3), x = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x
 <pre >## # A tibble: 3 x 3
 ##      id x     y    
 ##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1     1 x1    y1   
-## 2     2 x2    y2   
-## 3     3 x3    &lt;NA&gt;</pre>
+## 1    1. x1    y1   
+## 2    2. x2    y2   
+## 3    3. x3    &lt;NA&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>right_join</code></h2></hgroup><article  id="right_join">
 
@@ -263,9 +263,9 @@ df1 &lt;-  tibble(id = c(1, 2, 3), x = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x
 <pre >## # A tibble: 3 x 3
 ##      id x     y    
 ##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1     1 x1    y1   
-## 2     2 x2    y2   
-## 3     4 &lt;NA&gt;  y3</pre>
+## 1    1. x1    y1   
+## 2    2. x2    y2   
+## 3    4. &lt;NA&gt;  y3</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>full_join</code></h2></hgroup><article  id="full_join">
 
@@ -286,10 +286,10 @@ df1 &lt;-  tibble(id = c(1, 2, 3), x = c(&quot;x1&quot;, &quot;x2&quot;, &quot;x
 <pre >## # A tibble: 4 x 3
 ##      id x     y    
 ##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1     1 x1    y1   
-## 2     2 x2    y2   
-## 3     3 x3    &lt;NA&gt; 
-## 4     4 &lt;NA&gt;  y3</pre>
+## 1    1. x1    y1   
+## 2    2. x2    y2   
+## 3    3. x3    &lt;NA&gt; 
+## 4    4. &lt;NA&gt;  y3</pre>
 
 </article></slide><slide class=""><hgroup><h2>Funções <code>join</code> com mais de um elemento relacional</h2></hgroup><article  id="funcoes-join-com-mais-de-um-elemento-relacional">
 
@@ -312,14 +312,14 @@ df4 &lt;- tibble(id1 = c(1, 1, 2, 2),
 <pre >## # A tibble: 8 x 4
 ##     id1 id2   x     y1   
 ##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-## 1     1 a     x1    y1   
-## 2     1 b     x2    y2   
-## 3     1 a     x3    y1   
-## 4     1 a     x4    y1   
-## 5     2 a     x5    y3   
-## 6     2 b     x6    y4   
-## 7     2 b     x7    y4   
-## 8     2 b     x8    y4</pre>
+## 1    1. a     x1    y1   
+## 2    1. b     x2    y2   
+## 3    1. a     x3    y1   
+## 4    1. a     x4    y1   
+## 5    2. a     x5    y3   
+## 6    2. b     x6    y4   
+## 7    2. b     x7    y4   
+## 8    2. b     x8    y4</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>semi_join</code> e <code id="anchor3">anti_join</code></h2></hgroup><article  id="semi_join-e-anti_join">
 
@@ -345,8 +345,8 @@ df4 &lt;- tibble(id1 = c(1, 1, 2, 2),
 <pre >## # A tibble: 2 x 2
 ##      id x    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     1 x1   
-## 2     2 x2</pre>
+## 1    1. x1   
+## 2    2. x2</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>semi_join</code> e <code>anti_join</code></h2></hgroup><article  id="semi_join-e-anti_join-2">
 
@@ -359,7 +359,7 @@ df4 &lt;- tibble(id1 = c(1, 1, 2, 2),
 <pre >## # A tibble: 1 x 2
 ##      id x    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     3 x3</pre>
+## 1    3. x3</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>Filter join</code> sem o uso das funções <code>join</code> correspondentes</h2></hgroup><article  id="filter-join-sem-o-uso-das-funcoes-join-correspondentes" class="smaller">
 
@@ -381,8 +381,8 @@ df1[df1$id %in% df2$id,]</pre>
 <pre >## # A tibble: 2 x 2
 ##      id x    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     1 x1   
-## 2     2 x2</pre>
+## 1    1. x1   
+## 2    2. x2</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>Filter join</code> sem o uso das funções <code>join</code> correspondentes</h2></hgroup><article  id="filter-join-sem-o-uso-das-funcoes-join-correspondentes-1">
 
@@ -395,18 +395,18 @@ df1[df1$id %in% df2$id,]</pre>
 <pre >## # A tibble: 2 x 2
 ##      id x    
 ##   &lt;dbl&gt; &lt;chr&gt;
-## 1     1 x1   
-## 2     2 x2</pre>
+## 1    1. x1   
+## 2    2. x2</pre>
 
 </article></slide><slide class=""><hgroup><h2>Exercício 1</h2></hgroup><article  id="exercicio-1">
 
 <ol>
 <li>Carregue todos os dados referentes ao financiamento de pesquisa do CNPq (<strong>projetos</strong>, <strong>revistas</strong> e <strong>publicacoes</strong>);<br/></li>
 <li>Determine qual(is) variável(is) descreve(m) a relação entre estas três tabelas de dados;<br/></li>
-<li>Calcule o número médio de publicacões e o número médio de citações dos trabalho publicados para cada projeto financiado;<br/></li>
+<li>Calcule o número total de publicacões e o número médio de citações dos trabalho publicados para cada projeto financiado;<br/></li>
 <li>Calcule o índice de impacto médio e máximo (i.e., SJR) das publicacoes de cada projeto;<br/></li>
 <li>Adicione estas informações à tabela que descreve as características gerais de cada projeto;<br/></li>
-<li>Importe estas informações, utilizando o formato <code>.csv</code>.</li>
+<li>Exporte estas informações, utilizando o formato <code>.csv</code>.</li>
 </ol></article></slide>
 
 
